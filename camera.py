@@ -18,3 +18,5 @@ class Camera:
         self.pupil_distance = pupil_distance
         self.pupil = center - self.pupil_distance*self.orientation
     
+    def update(self) -> None:
+        pass

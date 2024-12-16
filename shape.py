@@ -21,6 +21,9 @@ class Shape:
     def edges(self) -> list[tuple]:
         return self._edges
 
+    def update(self) -> None:
+        pass
+
     def move(self, velocity: Vector3) -> None:
         for vertex in self._vertices:
             vertex += velocity
