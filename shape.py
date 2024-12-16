@@ -10,6 +10,7 @@ class Shape:
     """
 
     def __init__(self, vertices: list[Vector3], edges: list[tuple]) -> None:
+        self.color = (255, 0, 0)
         self._vertices = vertices
         self._edges = edges
     
