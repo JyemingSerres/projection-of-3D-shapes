@@ -9,16 +9,19 @@ class Camera:
     Camera doc
     """
 
-    def __init__(self, center: tuple=(0, 0, 0), aperture_distance: float=25) -> None:
-        self._center_pos = Vector3(center) # also the principal point / image center
+    def __init__(self, aperture: Vector3=(0, 0, 0), image_plane_dist: float=25) -> None:
+        self._aperture = aperture
         self._image_x_vect = Vector3(0, -1, 0) # normalized vector
         self._image_y_vect = Vector3(0, 0, 1) # normalized vector
         self._orientation = self.__orientation() # normalized vector
-        self._aperture_distance = aperture_distance # aperture_distance will influence FOV
-        self._aperture_pos = self.__aperture_pos()
+        self._image_plane_dist = image_plane_dist # will influence FOV since the size of the plane is finite and constant
 
         self.velocity = Vector3(0, 0, 0)
     
+    @property
+    def aperture(self) -> Vector3:
+        return self._aperture
+
     @property
     def image_x_vect(self) -> Vector3:
         return self._image_x_vect
@@ -30,18 +33,12 @@ class Camera:
     @property
     def orientation(self) -> Vector3:
         # calculated every time it is accessed
-        # could do otherwise if orientation is accessed multiple times per frame to optimize performance
+        # TODO: problem: accessing this property multiple times per frame leads to waste of computational ressources
         return self.__orientation()
 
     @property
-    def aperture_distance(self) -> float:
-        return self._aperture_distance
-    
-    @property
-    def aperture_pos(self) -> Vector3:
-        # calculated every time it is accessed
-        # could do otherwise if orientation is accessed multiple times per frame to optimize performance
-        return self.__aperture_pos()
+    def image_plane_dist(self) -> float:
+        return self._image_plane_dist
 
     def update(self) -> None:
         # TODO: update camera position
@@ -52,11 +49,8 @@ class Camera:
         pass
 
     def move(self, velocity: Vector3) -> None:
-        self._center_pos += velocity
-
-    def __aperture_pos(self) -> Vector3:
-        return self._center_pos - self._aperture_distance*self._orientation
+        self._aperture += velocity
 
     def __orientation(self) -> Vector3:
-        # orientation vector is the cross product (image_y) x (image_x)
+        # orientation vector is a normal vector to the projection plane
         return self._image_y_vect.cross(self._image_x_vect).normalize()

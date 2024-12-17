@@ -33,23 +33,24 @@ class Display:
 
             for vertex in shape.vertices:
                 # relative position of the vertex with respect to the aperture
-                vrtx_rel_aperture = vertex - camera.aperture_pos
+                vrtx_rel_pos = vertex - camera.aperture
 
-                # calculate the coefficient of the projection on the orientation of the camera
-                vrtx_scalar_dist = vrtx_rel_aperture.dot(camera.orientation) # works because camera.image_x_vect is normalized
+                # calculate the coefficient of the projection on the orientation of the camera. The dot product is equal to distance 
+                # because camera.image_x_vect is normalized
+                vrtx_dist = vrtx_rel_pos.dot(camera.orientation)
 
                 # vertex needs to be strictly in front of the aperture
-                if vrtx_scalar_dist > 0:
+                if vrtx_dist > 0:
                     # vect_ima_pos is the position of the vertex on the projection plane (representing the image captured) 
                     # relative to camera.center in 3D vector space
-                    vrtx_ima_pos = (vrtx_rel_aperture - (vrtx_scalar_dist*camera.orientation))*camera.aperture_distance/vrtx_scalar_dist
+                    vrtx_ima_pos = (vrtx_rel_pos - (vrtx_dist*camera.orientation))*camera.image_plane_dist/vrtx_dist
 
                     # convert vect_ima_pos to (x, y) position on the screen relative to screen center
-                    vrtx_x_pos = vrtx_ima_pos.dot(camera.image_x_vect) # works because camera.image_x_vect is normalized
-                    vrtx_y_pos = vrtx_ima_pos.dot(camera.image_y_vect) # works because camera.image_y_vect is normalized
+                    vrtx_x = vrtx_ima_pos.dot(camera.image_x_vect) # works because camera.image_x_vect is normalized
+                    vrtx_y = vrtx_ima_pos.dot(camera.image_y_vect) # works because camera.image_y_vect is normalized
 
-                    # convert (x, y) to coordinates in tune with the pygame interface
-                    vrtx_screen_pos = Vector2(vrtx_x_pos, -vrtx_y_pos) + Vector2(self.screen.get_width()/2, self.screen.get_height()/2)
+                    # convert (x, y) to coordinates matching the pygame interface
+                    vrtx_screen_pos = Vector2(vrtx_x, -vrtx_y) + Vector2(self.screen.get_width()/2, self.screen.get_height()/2)
 
                     vertices_screen_pos.append(vrtx_screen_pos)
                 else:
