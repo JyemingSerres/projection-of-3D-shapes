@@ -8,15 +8,14 @@ class Camera:
     """
     Camera doc
     """
-    DEFAULT_IMAGE_Y_VECT = Vector3(0, 0, 1)
-    DEFAULT_IMAGE_X_VECT = Vector3(0, -1, 0)
+    DEFAULT_IMAGE_Y_VECT = Vector3(0, 0, 1) # is normalized
+    DEFAULT_IMAGE_X_VECT = Vector3(0, -1, 0) # is normalized
 
     def __init__(self, center: tuple=(0, 0, 0), aperture_distance: float=25) -> None:
-        # _center_pos is the principal point / image center
-        self._center_pos = Vector3(center)
-        self._image_x_vect = Camera.DEFAULT_IMAGE_X_VECT # needs to be normalized
-        self._image_y_vect = Camera.DEFAULT_IMAGE_Y_VECT # needs to be normalized
-        self._orientation = self.__orientation() # needs to be normalized
+        self._center_pos = Vector3(center) # also the principal point / image center
+        self._image_x_vect = Camera.DEFAULT_IMAGE_X_VECT 
+        self._image_y_vect = Camera.DEFAULT_IMAGE_Y_VECT
+        self._orientation = self.__orientation() # is normalized
         self._aperture_distance = aperture_distance # aperture_distance will influence FOV
         self._pupil_pos = self.__aperture_pos()
     
@@ -44,9 +43,14 @@ class Camera:
 
     def update(self) -> None:
         # TODO: update camera position
-        self._center_pos += Vector3(0, 1, 0)
+        self.move(Vector3(0.1, 1, 0))
+
         # TODO: update camera angles
+        self.image_x_vect.rotate_ip_rad(-0.003, self.image_y_vect)
         pass
+
+    def move(self, velocity: Vector3) -> None:
+        self._center_pos += velocity
 
     def __aperture_pos(self) -> Vector3:
         return self._center_pos - self._aperture_distance*self._orientation
