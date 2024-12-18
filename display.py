@@ -17,13 +17,13 @@ class Display:
         self.screen = screen
         self.font = pygame.font.SysFont('comicsans', 16)
 
-    def render(self, world: World, clock: pygame.time.Clock) -> None:
+    def draw(self, world: World, clock: pygame.time.Clock) -> None:
         self.screen.fill(Display.BACKGROUND_COLOR)
-        self.__render_world(world)
-        self.__render_ui(clock)
+        self._draw_world(world)
+        self._draw_ui(clock)
         pygame.display.flip()
 
-    def __render_world(self, world: World) -> None:
+    def _draw_world(self, world: World) -> None:
         camera = world.camera
         shapes = world.shapes
 
@@ -62,7 +62,7 @@ class Display:
                 for edge in shape.edges:
                     pygame.draw.line(self.screen, shape.color, vertices_screen_pos[edge[0]], vertices_screen_pos[edge[1]])
 
-    def __render_ui(self, clock: pygame.time.Clock) -> None:
+    def _draw_ui(self, clock: pygame.time.Clock) -> None:
         center_x = self.screen.get_width()/2
         center_y = self.screen.get_height()/2
 
@@ -72,8 +72,8 @@ class Display:
         pygame.draw.line(self.screen, (255, 255, 255), (center_x, center_y - CROSSHAIR_SIZE), (center_x, center_y + CROSSHAIR_SIZE))
 
         # blit current fps on the top left of the screen
-        self.__blit_str(f"FPS: {round(clock.get_fps(), 1)}", (255, 255, 255), (5, 0))
+        self._blit_str(f"FPS: {round(clock.get_fps(), 1)}", (255, 255, 255), (5, 0))
     
-    def __blit_str(self, str: str, color: tuple, coord: tuple[float]) -> None:
+    def _blit_str(self, str: str, color: tuple, coord: tuple[float]) -> None:
         fps_surface = self.font.render(str, True, color)
         self.screen.blit(fps_surface, coord)
