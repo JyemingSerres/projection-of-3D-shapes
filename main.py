@@ -12,7 +12,7 @@ from shape import Shape
 from camera import Camera
 from world import World
 from display import Display
-from controller import Controller
+from engine import Engine
 
 # Initialize Pygame
 pygame.init()
@@ -21,12 +21,11 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 # Default state of the world
 camera = Camera()
-camera.velocity = Vector3(0.2, 1, 0)
-shape = Shape([Vector3(60, 0, -100), Vector3(60, 200, 0), Vector3(10, 50, 0), Vector3(60, 0, 200)], 
+shape = Shape([Vector3(200, 0, -100), Vector3(200, 200, 0), Vector3(100, 50, 0), Vector3(200, 0, 200)], 
               [(0, 1), (0, 2), (1, 2), (0, 3), (1, 3), (2, 3)])
 world = World(camera, [shape])
 display = Display(screen)
-controller = Controller()
+engine = Engine(world, display, clock)
 
 running = True
 
@@ -34,10 +33,11 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-    
-    controller.handle_inputs()
-    world.update()
-    display.render(world, clock)
+        else:
+            engine.handle_event(event)
+
+    engine.update_world()
+    engine.render()
     
     clock.tick(TARGET_FRAME_RATE)
 
