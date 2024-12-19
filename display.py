@@ -17,6 +17,8 @@ class Display:
         self.screen = screen
         self.font = pygame.font.SysFont('comicsans', 16)
 
+        pygame.mouse.set_visible(False)
+
     def draw(self, world: World, clock: pygame.time.Clock) -> None:
         self.screen.fill(Display.BACKGROUND_COLOR)
         self._draw_world(world)
@@ -60,7 +62,7 @@ class Display:
             if within_frame:
                 # draw lines corresponding to the edges of the shape
                 for edge in shape.edges:
-                    pygame.draw.line(self.screen, shape.color, vertices_screen_pos[edge[0]], vertices_screen_pos[edge[1]])
+                    pygame.draw.line(self.screen, shape.color, vertices_screen_pos[edge[0]], vertices_screen_pos[edge[1]], 2)
 
     def _draw_ui(self, clock: pygame.time.Clock) -> None:
         center_x = self.screen.get_width()/2
