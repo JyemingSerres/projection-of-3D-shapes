@@ -29,17 +29,9 @@ world = World(camera, [tetrahedron, cube])
 display = Display(screen)
 engine = Engine(world, display, clock)
 
-running = True
-
-while running:
-    # TODO: Event loop inside engine handle_event() ?
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-        else:
-            engine.handle_event(event)
+while engine.running:
+    engine.handle_events()
     pygame.mouse.set_pos(SCREEN_WIDTH/2, SCREEN_HEIGHT/2) # TODO: Dirty code
-
     engine.update_world()
     engine.render()
 

@@ -28,6 +28,8 @@ class Engine:
     """
 
     def __init__(self, world: World, display: Display, clock: Clock) -> None:
+        self.running = True
+
         self.world = world
         self.display = display
         self.clock = clock
@@ -64,45 +66,49 @@ class Engine:
         self.sm_vertical.add_transition(vertical_neutral, vertical_down, SEvent.DOWN_SHIFT)
         self.sm_vertical.add_transition(vertical_down, vertical_neutral, SEvent.UP_SHIFT)
 
-    def handle_event(self, event: Event) -> None:
-        match event.type:
-            case pygame.KEYDOWN:
-                match event.key:
-                    # camera movement
-                    case pygame.K_w:
-                        self.sm_medial.trigger(SEvent.FORWARD_SHIFT)
-                    case pygame.K_a:
-                        self.sm_lateral.trigger(SEvent.LEFT_SHIFT)
-                    case pygame.K_s:
-                        self.sm_medial.trigger(SEvent.BACKWARD_SHIFT)
-                    case pygame.K_d:
-                        self.sm_lateral.trigger(SEvent.RIGHT_SHIFT)
-                    case pygame.K_SPACE:
-                        self.sm_vertical.trigger(SEvent.UP_SHIFT)
-                    case pygame.K_LSHIFT:
-                        self.sm_vertical.trigger(SEvent.DOWN_SHIFT)
-                    # Quit when pressing escape
-                    case pygame.K_ESCAPE:
-                        pygame.event.post(pygame.event.Event(pygame.QUIT))
-            case pygame.KEYUP:
-                match event.key:
-                    # camera movement
-                    case pygame.K_w:
-                        self.sm_medial.trigger(SEvent.BACKWARD_SHIFT)
-                    case pygame.K_a:
-                        self.sm_lateral.trigger(SEvent.RIGHT_SHIFT)
-                    case pygame.K_s:
-                        self.sm_medial.trigger(SEvent.FORWARD_SHIFT)
-                    case pygame.K_d:
-                        self.sm_lateral.trigger(SEvent.LEFT_SHIFT)
-                    case pygame.K_SPACE:
-                        self.sm_vertical.trigger(SEvent.DOWN_SHIFT)
-                    case pygame.K_LSHIFT:
-                        self.sm_vertical.trigger(SEvent.UP_SHIFT)
-            case pygame.MOUSEMOTION:
-                offset = event.rel
-                if offset != (0, 0):
-                    self.world.camera.angular_velocity = (-self.CAMERA_SENSITIVITY*offset[0], -self.CAMERA_SENSITIVITY*offset[1])
+    def handle_events(self) -> None:
+        for event in pygame.event.get():
+            match event.type:
+                # stop running when encountering a pygame.QUIT event
+                case pygame.QUIT:
+                    self.running = False
+                case pygame.KEYDOWN:
+                    match event.key:
+                        # camera movement
+                        case pygame.K_w:
+                            self.sm_medial.trigger(SEvent.FORWARD_SHIFT)
+                        case pygame.K_a:
+                            self.sm_lateral.trigger(SEvent.LEFT_SHIFT)
+                        case pygame.K_s:
+                            self.sm_medial.trigger(SEvent.BACKWARD_SHIFT)
+                        case pygame.K_d:
+                            self.sm_lateral.trigger(SEvent.RIGHT_SHIFT)
+                        case pygame.K_SPACE:
+                            self.sm_vertical.trigger(SEvent.UP_SHIFT)
+                        case pygame.K_LSHIFT:
+                            self.sm_vertical.trigger(SEvent.DOWN_SHIFT)
+                        # stop running when ESC key is pressed down
+                        case pygame.K_ESCAPE:
+                            self.running = False
+                case pygame.KEYUP:
+                    match event.key:
+                        # camera movement
+                        case pygame.K_w:
+                            self.sm_medial.trigger(SEvent.BACKWARD_SHIFT)
+                        case pygame.K_a:
+                            self.sm_lateral.trigger(SEvent.RIGHT_SHIFT)
+                        case pygame.K_s:
+                            self.sm_medial.trigger(SEvent.FORWARD_SHIFT)
+                        case pygame.K_d:
+                            self.sm_lateral.trigger(SEvent.LEFT_SHIFT)
+                        case pygame.K_SPACE:
+                            self.sm_vertical.trigger(SEvent.DOWN_SHIFT)
+                        case pygame.K_LSHIFT:
+                            self.sm_vertical.trigger(SEvent.UP_SHIFT)
+                case pygame.MOUSEMOTION:
+                    offset = event.rel
+                    if offset != (0, 0):
+                        self.world.camera.angular_velocity = (-self.CAMERA_SENSITIVITY*offset[0], -self.CAMERA_SENSITIVITY*offset[1])
                 
     def update_world(self) -> None:
         # execute code from state machines
