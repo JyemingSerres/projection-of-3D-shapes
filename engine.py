@@ -7,6 +7,7 @@ from pygame.event import Event
 from pygame.time import Clock
 from enum import Enum
 
+# Project modules
 from config import *
 from state import State, StateMachine
 from world import World
@@ -31,7 +32,7 @@ class Engine:
         self.display = display
         self.clock = clock
 
-        self.CAMERA_SENSITIVITY = 0.2
+        self.CAMERA_SENSITIVITY = 0.1
 
         # camera lateral movement
         lateral_neutral = SCamLateralNeutral(self.world.camera)
@@ -100,8 +101,8 @@ class Engine:
                         self.sm_vertical.trigger(SEvent.UP_SHIFT)
             case pygame.MOUSEMOTION:
                 offset = event.rel
-                self.world.camera.image_x_vect.rotate_ip(-self.CAMERA_SENSITIVITY*offset[0], self.world.camera.image_y_vect)
-                self.world.camera.image_y_vect.rotate_ip(-self.CAMERA_SENSITIVITY*offset[1], self.world.camera.image_x_vect)
+                if offset != (0, 0):
+                    self.world.camera.angular_velocity = (-self.CAMERA_SENSITIVITY*offset[0], -self.CAMERA_SENSITIVITY*offset[1])
                 
     def update_world(self) -> None:
         # execute code from state machines
