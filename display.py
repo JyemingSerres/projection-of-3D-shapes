@@ -13,7 +13,7 @@ class Display:
     """
     BACKGROUND_COLOR = (0, 0, 0)
 
-    def __init__(self, screen) -> None:
+    def __init__(self, screen: pygame.surface.Surface) -> None:
         self.screen = screen
         self.font = pygame.font.SysFont('comicsans', 16)
 
@@ -34,20 +34,20 @@ class Display:
             within_frame = True
 
             for vertex in shape.vertices:
-                # relative position of the vertex with respect to the aperture
+                # relative position of the vertex with respect to the aperture (i.e. the projection line)
                 vrtx_rel_pos = vertex - camera.aperture
 
                 # calculate the coefficient of the projection on the orientation of the camera. The dot product is equal to distance 
-                # because camera.image_x_vect is normalized
+                # because camera.orientation is normalized
                 vrtx_dist = vrtx_rel_pos.dot(camera.orientation)
 
                 # vertex needs to be strictly in front of the aperture
                 if vrtx_dist > 0:
-                    # vect_ima_pos is the position of the vertex on the projection plane (representing the image captured) 
-                    # relative to camera.center in 3D vector space
-                    vrtx_ima_pos = (vrtx_rel_pos - (vrtx_dist*camera.orientation))*camera.image_plane_dist/vrtx_dist
+                    # find the position of the vertex on the projection plane (principal plane) 
+                    # relative to the image center (principal point) in 3D vector space
+                    vrtx_ima_pos = (vrtx_rel_pos - (vrtx_dist*camera.orientation))*camera.focal_length/vrtx_dist
 
-                    # convert vect_ima_pos to (x, y) position on the screen relative to screen center
+                    # convert vrtx_ima_pos to (x, y) position on the screen relative to screen center
                     vrtx_x = vrtx_ima_pos.dot(camera.image_x_vect) # works because camera.image_x_vect is normalized
                     vrtx_y = vrtx_ima_pos.dot(camera.image_y_vect) # works because camera.image_y_vect is normalized
 

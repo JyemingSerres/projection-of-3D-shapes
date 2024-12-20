@@ -9,12 +9,12 @@ class Camera:
     Camera doc
     """
 
-    def __init__(self, aperture: Vector3=Vector3(0, 0, 0), image_plane_dist: float=360) -> None:
+    def __init__(self, aperture: Vector3 = Vector3(0, 0, 0), focal_length: float = 360) -> None:
         self._aperture = aperture
         self._image_x_vect = Vector3(0, -1, 0) # normalized vector
         self._image_y_vect = Vector3(0, 0, 1) # normalized vector
         self._orientation = self._calculate_orientation() # normalized vector
-        self._image_plane_dist = image_plane_dist # will influence FOV since the size of the plane is finite and constant
+        self._focal_length = focal_length # will influence FOV since the size of the plane is finite and constant
 
         self.SPEED = 4
         self.rel_velocity = Vector3(0, 0, 0) # relative to our own point of view (looking towards orientation)
@@ -37,8 +37,8 @@ class Camera:
         return self._orientation
 
     @property
-    def image_plane_dist(self) -> float:
-        return self._image_plane_dist
+    def focal_length(self) -> float:
+        return self._focal_length
 
     def update(self) -> None:
         if self.rel_velocity.length() != 0:
@@ -55,5 +55,5 @@ class Camera:
         self._aperture += velocity
 
     def _calculate_orientation(self) -> Vector3:
-        # orientation vector is the vector normal to the projection plane
+        # orientation vector is the vector normal to the projection plane (principal plane)
         return self._image_y_vect.cross(self._image_x_vect).normalize()

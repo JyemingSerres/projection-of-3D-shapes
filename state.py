@@ -27,7 +27,7 @@ class StateMachine:
     StateMachine doc
     """
 
-    def __init__(self, states: list[State], default_state: State=None) -> None:
+    def __init__(self, states: list[State], default_state: State = None) -> None:
         self._states = states
         self._default_state = states[0] if default_state is None else default_state
         self._current_state = self._default_state

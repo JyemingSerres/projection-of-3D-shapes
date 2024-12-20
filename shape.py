@@ -9,7 +9,7 @@ class Shape:
     Shape doc
     """
 
-    def __init__(self, vertices: list[Vector3], edges: list[tuple], color: tuple[int, int, int]) -> None:
+    def __init__(self, vertices: list[Vector3], edges: list[tuple[int, int]], color: tuple[int, int, int]) -> None:
         self.color = color
         self._vertices = vertices
         self._edges = edges
