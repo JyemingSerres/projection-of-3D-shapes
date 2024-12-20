@@ -52,6 +52,9 @@ class StateMachine:
     def update(self) -> None:
         self._current_state.update()
 
+    def reset(self) -> None:
+        self._current_state = self._default_state
+
     def trigger(self, trigger: Enum) -> None:
         if trigger in self._current_state.transitions:
             self.__change_state(self._current_state.transitions[trigger])
