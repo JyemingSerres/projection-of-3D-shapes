@@ -62,7 +62,7 @@ class Display:
             if within_frame:
                 # draw lines corresponding to the edges of the shape
                 for edge in shape.edges:
-                    pygame.draw.line(self.screen, shape.color, vertices_screen_pos[edge[0]], vertices_screen_pos[edge[1]], 2)
+                    pygame.draw.aaline(self.screen, shape.color, vertices_screen_pos[edge[0]], vertices_screen_pos[edge[1]], 1)
 
     def _draw_ui(self, clock: pygame.time.Clock) -> None:
         center_x = self.screen.get_width()/2

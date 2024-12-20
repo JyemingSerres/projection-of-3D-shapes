@@ -49,6 +49,7 @@ class Camera:
         self.image_x_vect.rotate_ip(self.angular_velocity[0], self.image_y_vect)
         self.image_y_vect.rotate_ip(self.angular_velocity[1], self.image_x_vect)
         self._orientation = self._calculate_orientation()
+        self.angular_velocity = (0, 0) # TODO: dirty code
 
     def move(self, velocity: Vector3) -> None:
         self._aperture += velocity

@@ -3,12 +3,10 @@ Created on 12/16/2024
 by Jye-Ming Serres
 """
 import pygame
-from pygame.event import Event
 from pygame.time import Clock
 from enum import Enum
 
 # Project modules
-from config import *
 from state import State, StateMachine
 from world import World
 from camera import Camera
@@ -36,7 +34,7 @@ class Engine:
 
         self.CAMERA_SENSITIVITY = 0.1
 
-        # camera lateral movement
+        # camera lateral translation
         lateral_neutral = SCamLateralNeutral(self.world.camera)
         lateral_left = SCamLateralLeft(self.world.camera)
         lateral_right = SCamLateralRight(self.world.camera)
@@ -46,7 +44,7 @@ class Engine:
         self.sm_lateral.add_transition(lateral_neutral, lateral_right, SEvent.RIGHT_SHIFT)
         self.sm_lateral.add_transition(lateral_right, lateral_neutral, SEvent.LEFT_SHIFT)
 
-        # camera medial movement
+        # camera medial translation
         medial_neutral = SCamMedialNeutral(self.world.camera)
         medial_front = SCamMedialFront(self.world.camera)
         medial_back = SCamMedialBack(self.world.camera)
@@ -56,7 +54,7 @@ class Engine:
         self.sm_medial.add_transition(medial_neutral, medial_back, SEvent.BACKWARD_SHIFT)
         self.sm_medial.add_transition(medial_back, medial_neutral, SEvent.FORWARD_SHIFT)
 
-        # camera vertical movement
+        # camera vertical translation
         vertical_neutral = SCamVerticalNeutral(self.world.camera)
         vertical_up = SCamVerticalUp(self.world.camera)
         vertical_down = SCamVerticalDown(self.world.camera)
@@ -70,46 +68,33 @@ class Engine:
         for event in pygame.event.get():
             match event.type:
                 # stop running when encountering a pygame.QUIT event
-                case pygame.QUIT:
+                case pygame.QUIT: 
                     self.running = False
                 case pygame.KEYDOWN:
                     match event.key:
-                        # camera movement
-                        case pygame.K_w:
-                            self.sm_medial.trigger(SEvent.FORWARD_SHIFT)
-                        case pygame.K_a:
-                            self.sm_lateral.trigger(SEvent.LEFT_SHIFT)
-                        case pygame.K_s:
-                            self.sm_medial.trigger(SEvent.BACKWARD_SHIFT)
-                        case pygame.K_d:
-                            self.sm_lateral.trigger(SEvent.RIGHT_SHIFT)
-                        case pygame.K_SPACE:
-                            self.sm_vertical.trigger(SEvent.UP_SHIFT)
-                        case pygame.K_LSHIFT:
-                            self.sm_vertical.trigger(SEvent.DOWN_SHIFT)
                         # stop running when ESC key is pressed down
-                        case pygame.K_ESCAPE:
-                            self.running = False
+                        case pygame.K_ESCAPE: self.running = False
+                        # camera translation
+                        case pygame.K_a: self.sm_lateral.trigger(SEvent.LEFT_SHIFT)
+                        case pygame.K_d: self.sm_lateral.trigger(SEvent.RIGHT_SHIFT)
+                        case pygame.K_s: self.sm_medial.trigger(SEvent.BACKWARD_SHIFT)
+                        case pygame.K_w: self.sm_medial.trigger(SEvent.FORWARD_SHIFT)
+                        case pygame.K_SPACE: self.sm_vertical.trigger(SEvent.UP_SHIFT)
+                        case pygame.K_LSHIFT: self.sm_vertical.trigger(SEvent.DOWN_SHIFT)
                 case pygame.KEYUP:
                     match event.key:
-                        # camera movement
-                        case pygame.K_w:
-                            self.sm_medial.trigger(SEvent.BACKWARD_SHIFT)
-                        case pygame.K_a:
-                            self.sm_lateral.trigger(SEvent.RIGHT_SHIFT)
-                        case pygame.K_s:
-                            self.sm_medial.trigger(SEvent.FORWARD_SHIFT)
-                        case pygame.K_d:
-                            self.sm_lateral.trigger(SEvent.LEFT_SHIFT)
-                        case pygame.K_SPACE:
-                            self.sm_vertical.trigger(SEvent.DOWN_SHIFT)
-                        case pygame.K_LSHIFT:
-                            self.sm_vertical.trigger(SEvent.UP_SHIFT)
+                        # camera translation
+                        case pygame.K_a: self.sm_lateral.trigger(SEvent.RIGHT_SHIFT)
+                        case pygame.K_d: self.sm_lateral.trigger(SEvent.LEFT_SHIFT)
+                        case pygame.K_s: self.sm_medial.trigger(SEvent.FORWARD_SHIFT)
+                        case pygame.K_w: self.sm_medial.trigger(SEvent.BACKWARD_SHIFT)
+                        case pygame.K_SPACE: self.sm_vertical.trigger(SEvent.DOWN_SHIFT)
+                        case pygame.K_LSHIFT: self.sm_vertical.trigger(SEvent.UP_SHIFT)
+                # camera rotation
                 case pygame.MOUSEMOTION:
-                    offset = event.rel
-                    if offset != (0, 0):
-                        self.world.camera.angular_velocity = (-self.CAMERA_SENSITIVITY*offset[0], -self.CAMERA_SENSITIVITY*offset[1])
-                
+                    self.world.camera.angular_velocity = (-self.CAMERA_SENSITIVITY*event.rel[0], -self.CAMERA_SENSITIVITY*event.rel[1])
+                    pygame.mouse.set_pos(self.display.screen.get_width()/2, self.display.screen.get_height()/2)
+
     def update_world(self) -> None:
         # execute code from state machines
         self.sm_medial.update()
@@ -132,7 +117,7 @@ class SCam(State):
 
     def exit(self) -> None: pass
 
-# lateral movement
+# lateral translation
 class SCamLateralLeft(SCam):
     def enter(self) -> None:
         self.camera.rel_velocity.y = 1
@@ -145,7 +130,7 @@ class SCamLateralNeutral(SCam):
     def enter(self) -> None:
         self.camera.rel_velocity.y = 0
 
-# medial movement
+# medial translation
 class SCamMedialFront(SCam):
     def enter(self) -> None:
         self.camera.rel_velocity.x = 1
@@ -158,7 +143,7 @@ class SCamMedialNeutral(SCam):
     def enter(self) -> None:
         self.camera.rel_velocity.x = 0
 
-# vertical movement
+# vertical translation
 class SCamVerticalUp(SCam):
     def enter(self) -> None:
         self.camera.rel_velocity.z = 1

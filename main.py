@@ -18,6 +18,7 @@ from engine import Engine
 pygame.init()
 clock = pygame.time.Clock()
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+pygame.event.set_grab(True)
 
 # Default state of the world
 camera = Camera()
@@ -31,11 +32,10 @@ engine = Engine(world, display, clock)
 
 while engine.running:
     engine.handle_events()
-    pygame.mouse.set_pos(SCREEN_WIDTH/2, SCREEN_HEIGHT/2) # TODO: Dirty code
     engine.update_world()
     engine.render()
 
     clock.tick(TARGET_FRAME_RATE)
-
+    
 pygame.quit()
 sys.exit()
