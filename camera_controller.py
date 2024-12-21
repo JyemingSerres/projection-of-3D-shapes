@@ -26,7 +26,7 @@ class CameraController:
     def __init__(self, camera: Camera) -> None:
         self.camera = camera
         self.cam_look_sens = 0.1
-        self.cam_speed = 4
+        self.cam_speed = 400
         self.rel_velocity = Vector3(0, 0, 0) # relative to our own point of view (looking towards orientation)
 
         # lateral translation state machine

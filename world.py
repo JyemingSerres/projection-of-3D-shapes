@@ -22,7 +22,7 @@ class World:
     def camera(self) -> Camera:
         return self._camera
 
-    def update(self) -> None:
+    def update(self, dt: float) -> None:
         for shape in self._shapes:
-            shape.update()
-        self._camera.update()
+            shape.update(dt)
+        self._camera.update(dt)

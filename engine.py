@@ -50,11 +50,13 @@ class Engine:
         # camera rotation
         self.cam_controller.rotation_event(pygame.mouse.get_rel())
 
-    def update_world(self) -> None:
+    def update_world(self, milliseconds: int) -> None:
         # execute code from camera controller
         self.cam_controller.update()
+        
         # update the model
-        self.world.update()
+        dt = milliseconds / 1000
+        self.world.update(dt)
 
     def render(self) -> None:
         self.display.draw(self.world, self.clock)

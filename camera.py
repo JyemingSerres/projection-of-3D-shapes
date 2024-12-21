@@ -39,8 +39,8 @@ class Camera:
     def focal_length(self) -> float:
         return self._focal_length
 
-    def update(self) -> None:
-        self.move(self.velocity)
+    def update(self, dt: float) -> None:
+        self.move(self.velocity * dt)
         self.rotate(self.angular_velocity)
 
     def move(self, velocity: Vector3) -> None:
