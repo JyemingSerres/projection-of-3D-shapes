@@ -15,6 +15,7 @@ class Display:
 
     def __init__(self, screen: pygame.surface.Surface) -> None:
         self.screen = screen
+        self.screen_center = (screen.get_width()/2, screen.get_height()/2)
         self.font = pygame.font.SysFont('comicsans', 16)
 
         pygame.mouse.set_visible(False)
@@ -52,7 +53,7 @@ class Display:
                     vrtx_y = vrtx_ima_pos.dot(camera.image_y_vect) # works because camera.image_y_vect is normalized
 
                     # convert (x, y) to coordinates matching the pygame interface
-                    vrtx_screen_pos = Vector2(vrtx_x, -vrtx_y) + Vector2(self.screen.get_width()/2, self.screen.get_height()/2)
+                    vrtx_screen_pos = Vector2(vrtx_x, -vrtx_y) + Vector2(self.screen_center)
 
                     vertices_screen_pos.append(vrtx_screen_pos)
                 else:

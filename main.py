@@ -19,6 +19,7 @@ pygame.init()
 clock = pygame.time.Clock()
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.event.set_grab(True)
+pygame.event.set_keyboard_grab(False)
 
 # Default state of the world
 camera = Camera()
