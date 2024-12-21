@@ -9,11 +9,15 @@ class Shape:
     Shape doc
     """
 
-    def __init__(self, vertices: list[Vector3], edges: list[tuple[int, int]], color: tuple[int, int, int]) -> None:
-        self.color = color
+    def __init__(self, vertices: list[Vector3], edges: list[tuple[int, int]], color: tuple[int, int, int, int]) -> None:
+        self._color = color
         self._vertices = vertices
         self._edges = edges
     
+    @property
+    def color(self) -> tuple[int, int, int, int]:
+        return self._color
+
     @property
     def vertices(self) -> list[Vector3]:
         return self._vertices

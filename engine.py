@@ -59,4 +59,4 @@ class Engine:
         self.world.update(dt)
 
     def render(self) -> None:
-        self.display.draw(self.world, self.clock)
+        self.display.draw(self.world, self.clock.get_fps())
