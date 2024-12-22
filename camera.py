@@ -43,12 +43,12 @@ class Camera:
         self.move(self.velocity * dt)
         self.rotate(self.angular_velocity)
 
-    def move(self, velocity: Vector3) -> None:
-        self._aperture += velocity
+    def move(self, displacement: Vector3) -> None:
+        self._aperture += displacement
 
-    def rotate(self, angular_velocity: tuple[int, int]) -> None:
-        self.image_x_vect.rotate_ip(angular_velocity[0], self.image_y_vect)
-        self.image_y_vect.rotate_ip(angular_velocity[1], self.image_x_vect)
+    def rotate(self, angular_displacement: tuple[int, int]) -> None:
+        self.image_x_vect.rotate_ip(angular_displacement[0], self.image_y_vect)
+        self.image_y_vect.rotate_ip(angular_displacement[1], self.image_x_vect)
         self._orientation = self._calculate_orientation()
 
     def _calculate_orientation(self) -> Vector3:

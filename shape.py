@@ -9,10 +9,18 @@ class Shape:
     Shape doc
     """
 
-    def __init__(self, vertices: list[Vector3], edges: list[tuple[int, int]], color: tuple[int, int, int, int]) -> None:
+    def __init__(self, center: Vector3, 
+                 vertices: list[Vector3], 
+                 edges: list[tuple[int, int]], 
+                 color: tuple[int, int, int, int]) -> None:
+        self._center = center
         self._color = color
         self._vertices = vertices
         self._edges = edges
+    
+    @property
+    def center(self) -> Vector3:
+        return self._center
     
     @property
     def color(self) -> tuple[int, int, int, int]:
@@ -28,6 +36,16 @@ class Shape:
 
     def update(self, dt: float) -> None: pass
 
-    def move(self, velocity: Vector3) -> None:
+    def move(self, displacement: Vector3) -> None:
         for vertex in self._vertices:
-            vertex += velocity
+            vertex += displacement
+        self._center += displacement
+
+    def rotate(self, angular_displacement: Vector3) -> None:
+        old_center = self.center.copy()
+        self.move(-old_center)
+        for vertex in self._vertices:
+            vertex.rotate_x_ip(angular_displacement.x)
+            vertex.rotate_y_ip(angular_displacement.y)
+            vertex.rotate_z_ip(angular_displacement.z)
+        self.move(old_center)
