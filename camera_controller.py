@@ -2,13 +2,15 @@
 Created on 12/20/2024
 by Jye-Ming Serres
 """
-from enum import Enum
+from enum import Enum, unique
 from pygame import Vector3
 
 from state import State
 from state_machine import StateMachine
 from camera import Camera
 
+
+@unique
 class CamEvent(Enum):
     LEFT_SHIFT = 1,
     RIGHT_SHIFT = 2,
