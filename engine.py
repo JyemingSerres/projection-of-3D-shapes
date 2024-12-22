@@ -60,3 +60,4 @@ class Engine:
 
     def render(self) -> None:
         self.display.draw(self.world, self.clock.get_fps())
+        pygame.display.flip()

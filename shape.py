@@ -4,15 +4,17 @@ by Jye-Ming Serres
 """
 from pygame import Vector3
 
+from config import Color
+
 class Shape:
     """
     Shape doc
     """
 
-    def __init__(self, center: Vector3, 
-                 vertices: list[Vector3], 
-                 edges: list[tuple[int, int]], 
-                 color: tuple[int, int, int, int]) -> None:
+    def __init__(self, center: Vector3,
+                 vertices: list[Vector3],
+                 edges: list[tuple[int, int]],
+                 color: Color) -> None:
         self._center = center
         self._color = color
         self._vertices = vertices
@@ -23,7 +25,7 @@ class Shape:
         return self._center
     
     @property
-    def color(self) -> tuple[int, int, int, int]:
+    def color(self) -> Color:
         return self._color
 
     @property
@@ -42,10 +44,10 @@ class Shape:
         self._center += displacement
 
     def rotate(self, angular_displacement: Vector3) -> None:
-        old_center = self.center.copy()
-        self.move(-old_center)
+        center_pos = self._center.copy()
+        self.move(-center_pos)
         for vertex in self._vertices:
             vertex.rotate_x_ip(angular_displacement.x)
             vertex.rotate_y_ip(angular_displacement.y)
             vertex.rotate_z_ip(angular_displacement.z)
-        self.move(old_center)
+        self.move(center_pos)

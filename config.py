@@ -3,6 +3,7 @@ Created on 12/15/2024
 by Jye-Ming Serres
 """
 import math
+from enum import Enum
 
 # Display settings
 SCREEN_WIDTH = 960
@@ -13,13 +14,12 @@ TARGET_FRAME_RATE = 100
 GOLDEN_RATIO = (1 + math.sqrt(5))/2
 
 # Colors
-COLOR = {
-    "white": (255, 255 ,255),
-    "red": (255, 0, 0),
-    "green": (0, 255, 0),
-    "blue": (0, 0, 255),
-    "yellow": (255, 255, 0),
-    "magenta": (255, 0, 255),
-    "cyan": (0, 255, 255),
-    "space_blue": (10, 10, 20),
-}
+class Color(Enum):
+    WHITE = (255, 255,255),
+    RED = (255, 0, 0),
+    GREEN = (0, 255, 0),
+    BLUE = (0, 0, 255),
+    YELLOW = (255, 255, 0),
+    MAGENTA = (255, 0, 255),
+    CYAN = (0, 255, 255),
+    DEEP_SPACE = (10, 10, 20),

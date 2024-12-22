@@ -5,7 +5,7 @@ by Jye-Ming Serres
 from collections.abc import Callable
 from pygame import Vector3
 
-from config import GOLDEN_RATIO
+from config import *
 from shape import Shape
 
 
@@ -14,7 +14,7 @@ class ShapeFactory:
     ShapeFactory doc
     """
 
-    def make_shape(self, type: str, pos: Vector3, radius: float, color: tuple[int, int, int, int]) -> Shape:
+    def make_shape(self, type: str, pos: Vector3, radius: float, color: Color) -> Shape:
         maker = self._get_maker(type)
         shape = maker(color)
         max_vect = max(shape.vertices, key=lambda vect: vect.length_squared())
@@ -24,7 +24,7 @@ class ShapeFactory:
         shape.move(pos)
         return shape
 
-    def _get_maker(self, type: str) -> Callable[[tuple[int, int, int]], Shape]:
+    def _get_maker(self, type: str) -> Callable[[Color], Shape]:
         maker = None
         match type:
             case "tetrahedron":
@@ -41,7 +41,7 @@ class ShapeFactory:
                 raise ValueError(f"Unknown shape type to ShapeFactory : '{type}'")
         return maker
     
-    def _make_tetrahedron(self, color: tuple[int, int, int, int]) -> Shape:
+    def _make_tetrahedron(self, color: Color) -> Shape:
         vertices = [
             Vector3(-1, -1, 1),
             Vector3(-1, 1, -1),
@@ -58,7 +58,7 @@ class ShapeFactory:
             ]
         return Shape(Vector3(0, 0, 0), vertices, edges, color)
 
-    def _make_cube(self, color: tuple[int, int, int, int]) -> Shape:
+    def _make_cube(self, color: Color) -> Shape:
         vertices = [
             Vector3(-1, -1, -1),
             Vector3(-1, -1, 1),
@@ -85,7 +85,7 @@ class ShapeFactory:
             ]
         return Shape(Vector3(0, 0, 0), vertices, edges, color)
     
-    def _make_octahedron(self, color: tuple[int, int, int, int]) -> Shape:
+    def _make_octahedron(self, color: Color) -> Shape:
         vertices = [
             Vector3(-1, 0, 0),
             Vector3(0, -1, 0),
@@ -110,7 +110,7 @@ class ShapeFactory:
             ]
         return Shape(Vector3(0, 0, 0), vertices, edges, color)
     
-    def _make_dodecahedron(self, color: tuple[int, int, int, int]) -> Shape:
+    def _make_dodecahedron(self, color: Color) -> Shape:
         vertices = [
             Vector3(-GOLDEN_RATIO, 0, -1/GOLDEN_RATIO),
             Vector3(-GOLDEN_RATIO, 0, 1/GOLDEN_RATIO),
@@ -167,7 +167,7 @@ class ShapeFactory:
             ]
         return Shape(Vector3(0, 0, 0), vertices, edges, color)
 
-    def _make_icosahedron(self, color: tuple[int, int, int, int]) -> Shape:
+    def _make_icosahedron(self, color: Color) -> Shape:
         vertices = [
             Vector3(-GOLDEN_RATIO, 0, -1),
             Vector3(-GOLDEN_RATIO, 0, 1),

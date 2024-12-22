@@ -3,7 +3,8 @@ Created on 12/16/2024
 by Jye-Ming Serres
 """
 import pygame
-from pygame import Vector2
+from pygame import Vector2, draw
+from pygame.surface import Surface
 
 from config import *
 from world import World
@@ -13,21 +14,19 @@ class Display:
     Display doc
     """
 
-    def __init__(self, screen: pygame.surface.Surface) -> None:
+    def __init__(self, screen: Surface) -> None:
         self.screen = screen
-        self.screen_center = (screen.get_width()/2, screen.get_height()/2)
+        self.screen_center = Vector2(screen.get_width(), screen.get_height())/2
         self.font = pygame.font.SysFont("Times New Roman", 16)
+        self.crosshair_size = 10
+        self.ui_color = Color.WHITE
+        self.background_color = Color.DEEP_SPACE
         pygame.mouse.set_visible(False)
 
-        self.CROSS_SIZE = 5
-        self.UI_COLOR = COLOR["white"]
-        self.BACKGROUND_COLOR = COLOR["space_blue"]
-
     def draw(self, world: World, fps: float) -> None:
-        self.screen.fill(self.BACKGROUND_COLOR)
+        self.screen.fill(self.background_color.value)
         self._draw_world(world)
         self._draw_ui(fps)
-        pygame.display.flip()
 
     def _draw_world(self, world: World) -> None:
         camera = world.camera
@@ -38,25 +37,22 @@ class Display:
             within_frame = True
 
             for vertex in shape.vertices:
-                # relative position of the vertex with respect to the aperture (i.e. the projection line)
+                # relative position with respect to the aperture (i.e. the projection line)
                 vrtx_rel = vertex - camera.aperture
 
-                # calculate the coefficient of the projection on the orientation of the camera. 
-                # The dot product is equal to distance because orientation is normalized
+                # calculate the coefficient of the projection on camera orientation 
+                # The dot product is equal to distance since orientation is normalized
                 vrtx_dist = vrtx_rel.dot(camera.orientation)
 
                 # vertex needs to be strictly in front of the aperture
                 if vrtx_dist > 0:
-                    # find the position of the vertex on the projection plane (principal plane) 
-                    # relative to the image center (principal point) in 3D vector space
-                    vrtx_ima = (vrtx_rel - (vrtx_dist*camera.orientation))*camera.focal_length/vrtx_dist
-
-                    # convert vrtx_ima to (x, y) position on the screen relative to screen center
-                    vrtx_x = vrtx_ima.dot(camera.image_x_vect) # works because image_x_vect is normalized
-                    vrtx_y = vrtx_ima.dot(camera.image_y_vect) # works because image_y_vect is normalized
+                    # find (x, y) position on the projection plane relative to image center
+                    vrtx_ima = vrtx_rel*camera.focal_length/vrtx_dist
+                    vrtx_x = vrtx_ima.dot(camera.image_x_vect) # works since image_x_vect is normalized
+                    vrtx_y = vrtx_ima.dot(camera.image_y_vect) # works since image_y_vect is normalized
 
                     # convert (x, y) to coordinates matching the pygame interface
-                    vrtx_screen = Vector2(vrtx_x, -vrtx_y) + Vector2(self.screen_center)
+                    vrtx_screen = Vector2(vrtx_x, -vrtx_y) + self.screen_center
 
                     vertices_screen.append(vrtx_screen)
                 else:
@@ -64,20 +60,21 @@ class Display:
                     break
 
             if within_frame:
-                # draw lines corresponding to the edges of the shape
                 for edge in shape.edges:
-                    pygame.draw.aaline(self.screen, shape.color, vertices_screen[edge[0]], vertices_screen[edge[1]])
+                    draw.aaline(self.screen, shape.color.value, vertices_screen[edge[0]], vertices_screen[edge[1]])
 
     def _draw_ui(self, fps: float) -> None:
         # draw crosshair
-        pygame.draw.line(self.screen, self.UI_COLOR, (self.screen_center[0] - self.CROSS_SIZE, self.screen_center[1]), 
-                         (self.screen_center[0] + self.CROSS_SIZE, self.screen_center[1]))
-        pygame.draw.line(self.screen, self.UI_COLOR, (self.screen_center[0], self.screen_center[1] - self.CROSS_SIZE), 
-                         (self.screen_center[0], self.screen_center[1] + self.CROSS_SIZE))
+        x = self.screen_center.x
+        y = self.screen_center.y
+        offset = self.crosshair_size/2
+        draw.line(self.screen, self.ui_color.value, (x - offset, y), (x + offset, y))
+        draw.line(self.screen, self.ui_color.value, (x, y - offset), (x, y + offset))
 
-        self._blit_str(f"FPS: {round(fps, 1)}", self.UI_COLOR, (5, self.screen.get_height() - 24))
-        self._blit_str(f"[ESC] to quit", self.UI_COLOR, (5, 5))
+        margin = 5
+        self._blit_string("[ESC] to quit", self.ui_color, (margin, 5))
+        self._blit_string(f"FPS: {round(fps, 1)}", self.ui_color, (margin, self.screen.get_height() - 24))
     
-    def _blit_str(self, str: str, color: tuple[int, int, int, int], coord: tuple[float,  float]) -> None:
-        surface = self.font.render(str, True, color)
+    def _blit_string(self, str: str, color: Color, coord: tuple[float,  float]) -> None:
+        surface = self.font.render(str, True, color.value)
         self.screen.blit(surface, coord)
