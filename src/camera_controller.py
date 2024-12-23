@@ -5,8 +5,7 @@ by Jye-Ming Serres
 from enum import Enum, unique
 from pygame import Vector3
 
-from state import State
-from state_machine import StateMachine
+from state_machine import State, StateMachine
 from camera import Camera
 
 

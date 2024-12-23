@@ -3,8 +3,26 @@ Created on 12/20/2024
 by Jye-Ming Serres
 """
 from enum import Enum
+from abc import ABC, abstractmethod
 
-from state import State
+
+class State(ABC):
+    """
+    State doc
+    """
+
+    def __init__(self) -> None:
+        self.transitions = dict()
+
+    @abstractmethod
+    def enter(self) -> None: pass
+
+    @abstractmethod
+    def update(self) -> None: pass
+
+    @abstractmethod
+    def exit(self) -> None: pass
+
 
 class StateMachine:
     """
