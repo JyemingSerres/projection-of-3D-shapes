@@ -5,6 +5,7 @@ by Jye-Ming Serres
 import math
 from enum import Enum
 
+
 # Display settings
 SCREEN_WIDTH = 960
 SCREEN_HEIGHT = 720

@@ -9,7 +9,7 @@ class World:
     """
     World doc
     """
-    
+
     def __init__(self, camera: Camera, shapes: list[Shape]) -> None:
         self._shapes = shapes
         self._camera = camera

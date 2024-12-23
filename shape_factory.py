@@ -5,7 +5,7 @@ by Jye-Ming Serres
 from collections.abc import Callable
 from pygame import Vector3
 
-from config import *
+from config import Color, GOLDEN_RATIO
 from shape import Shape
 
 
@@ -14,8 +14,8 @@ class ShapeFactory:
     ShapeFactory doc
     """
 
-    def make_shape(self, type: str, pos: Vector3, radius: float, color: Color) -> Shape:
-        maker = self._get_maker(type)
+    def make_shape(self, shape_name: str, pos: Vector3, radius: float, color: Color) -> Shape:
+        maker = self._get_maker(shape_name)
         shape = maker(color)
         max_vect = max(shape.vertices, key=lambda vect: vect.length_squared())
         scale_factor = radius/max_vect.length()
@@ -24,9 +24,9 @@ class ShapeFactory:
         shape.move(pos)
         return shape
 
-    def _get_maker(self, type: str) -> Callable[[Color], Shape]:
+    def _get_maker(self, shape_name: str) -> Callable[[Color], Shape]:
         maker = None
-        match type:
+        match shape_name:
             case "tetrahedron":
                 maker = self._make_tetrahedron
             case "cube":
@@ -40,7 +40,7 @@ class ShapeFactory:
             case _:
                 raise ValueError(f"Unknown shape type to ShapeFactory : '{type}'")
         return maker
-    
+
     def _make_tetrahedron(self, color: Color) -> Shape:
         vertices = [
             Vector3(-1, -1, 1),
@@ -84,7 +84,7 @@ class ShapeFactory:
             (6, 7),
             ]
         return Shape(Vector3(0, 0, 0), vertices, edges, color)
-    
+
     def _make_octahedron(self, color: Color) -> Shape:
         vertices = [
             Vector3(-1, 0, 0),
@@ -109,7 +109,7 @@ class ShapeFactory:
             (4, 5),
             ]
         return Shape(Vector3(0, 0, 0), vertices, edges, color)
-    
+
     def _make_dodecahedron(self, color: Color) -> Shape:
         vertices = [
             Vector3(-GOLDEN_RATIO, 0, -1/GOLDEN_RATIO),

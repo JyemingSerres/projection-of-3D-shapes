@@ -6,8 +6,8 @@ import sys
 import pygame
 from pygame import Vector3
 
-# Project modules
-from config import *
+import config
+from config import Color
 from shape_factory import ShapeFactory
 from camera import Camera
 from world import World
@@ -18,7 +18,8 @@ from engine import Engine
 # Initialize Pygame
 pygame.init()
 clock = pygame.time.Clock()
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+screen = pygame.display.set_mode((config.SCREEN_WIDTH, config.SCREEN_HEIGHT))
+pygame.display.set_caption('Projection of 3D shapes')
 pygame.event.set_grab(True)
 pygame.event.set_keyboard_grab(False)
 
@@ -35,7 +36,7 @@ display = Display(screen)
 engine = Engine(world, display, clock)
 
 while engine.running:
-    elapsed = clock.tick(TARGET_FRAME_RATE)
+    elapsed = clock.tick(config.TARGET_FRAME_RATE)
     engine.handle_events()
     engine.update_world(elapsed)
     engine.render()

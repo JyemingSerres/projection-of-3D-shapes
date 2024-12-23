@@ -27,9 +27,9 @@ class CameraController:
 
     def __init__(self, camera: Camera) -> None:
         self.camera = camera
-        self.cam_look_sens = 0.1
-        self.cam_speed = 400
-        self.rel_velocity = Vector3(0, 0, 0) # relative to our own point of view (looking towards orientation)
+        self.look_sens = 0.1
+        self.speed = 400
+        self.rel_direction = Vector3(0, 0, 0) # relative to camera's point of view
 
         # lateral translation state machine
         lateral_neutral = SCamLateralNeutral(self)
@@ -61,33 +61,36 @@ class CameraController:
         self.sm_vertical.add_transition(vertical_neutral, vertical_down, CamEvent.DOWN_SHIFT)
         self.sm_vertical.add_transition(vertical_down, vertical_neutral, CamEvent.UP_SHIFT)
 
-    def translation_event(self, event: CamEvent) -> None:
+    def translate_event(self, event: CamEvent) -> None:
         self.sm_lateral.trigger(event)
         self.sm_medial.trigger(event)
         self.sm_vertical.trigger(event)
 
-    def rotation_event(self, mouse_motion: tuple[int, int]) -> None:
-        self.camera.angular_velocity = (-self.cam_look_sens*mouse_motion[0], -self.cam_look_sens*mouse_motion[1])
+    def rotate_event(self, mouse_motion: tuple[int, int]) -> None:
+        self.camera.angular_velocity = -self.look_sens*Vector3(mouse_motion[0], mouse_motion[1], 0)
 
     def update(self) -> None:
         self.sm_lateral.update()
         self.sm_medial.update()
         self.sm_vertical.update()
-        if self.rel_velocity.length() == 0:
-            self.camera.velocity = self.rel_velocity
+        if self.rel_direction.length() == 0:
+            self.camera.velocity = Vector3(0, 0, 0)
         else:
-            direction = self.rel_velocity.normalize()
-            self.camera.velocity = self.cam_speed * (direction.x*self.camera._orientation - direction.y*self.camera.image_x_vect + direction.z*self.camera.image_y_vect)
+            rel_vel = self.speed * self.rel_direction.normalize()
+            self.camera.velocity =  (rel_vel.x*self.camera.orientation
+                                     - rel_vel.y*self.camera.image_x
+                                     + rel_vel.z*self.camera.image_y)
 
 
 class SCam(State):
     """
     SCam doc
     """
+
     def __init__(self, camera_controller: CameraController) -> None:
         super().__init__()
         self.camera_controller = camera_controller
-    
+
     def enter(self) -> None: pass
 
     def update(self) -> None: pass
@@ -98,47 +101,47 @@ class SCam(State):
 # lateral translation
 class SCamLateralLeft(SCam):
     def enter(self) -> None:
-        self.camera_controller.rel_velocity.y = 1
+        self.camera_controller.rel_direction.y = 1
 
 
 class SCamLateralRight(SCam):
     def enter(self) -> None:
-        self.camera_controller.rel_velocity.y = -1
+        self.camera_controller.rel_direction.y = -1
 
 
 class SCamLateralNeutral(SCam):
     def enter(self) -> None:
-        self.camera_controller.rel_velocity.y = 0
+        self.camera_controller.rel_direction.y = 0
 
 
 # medial translation
 class SCamMedialFront(SCam):
     def enter(self) -> None:
-        self.camera_controller.rel_velocity.x = 1
+        self.camera_controller.rel_direction.x = 1
 
 
 class SCamMedialBack(SCam):
     def enter(self) -> None:
-        self.camera_controller.rel_velocity.x = -1
+        self.camera_controller.rel_direction.x = -1
 
 
 class SCamMedialNeutral(SCam):
     def enter(self) -> None:
-        self.camera_controller.rel_velocity.x = 0
+        self.camera_controller.rel_direction.x = 0
 
 
 # vertical translation
 class SCamVerticalUp(SCam):
     def enter(self) -> None:
-        self.camera_controller.rel_velocity.z = 1
+        self.camera_controller.rel_direction.z = 1
 
 
 class SCamVerticalDown(SCam):
     def enter(self) -> None:
-        self.camera_controller.rel_velocity.z = -1
+        self.camera_controller.rel_direction.z = -1
 
 
 class SCamVerticalNeutral(SCam):
     def enter(self) -> None:
-        self.camera_controller.rel_velocity.z = 0
+        self.camera_controller.rel_direction.z = 0
 

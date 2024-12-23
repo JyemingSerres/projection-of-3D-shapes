@@ -19,11 +19,11 @@ class Shape:
         self._color = color
         self._vertices = vertices
         self._edges = edges
-    
+
     @property
     def center(self) -> Vector3:
         return self._center
-    
+
     @property
     def color(self) -> Color:
         return self._color
@@ -31,7 +31,7 @@ class Shape:
     @property
     def vertices(self) -> list[Vector3]:
         return self._vertices
-    
+
     @property
     def edges(self) -> list[tuple]:
         return self._edges
