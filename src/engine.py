@@ -1,13 +1,14 @@
 """
-Created on 12/16/2024
-by Jye-Ming Serres
 """
+
 import pygame
 from pygame.time import Clock
 
 from camera_controller import CameraController, CamEvent
 from world import World
 from display import Display
+
+__author__ = "Jye-Ming Serres"
 
 
 class Engine:

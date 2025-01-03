@@ -1,12 +1,14 @@
 """
-Created on 12/20/2024
-by Jye-Ming Serres
 """
+
 from enum import Enum, unique
+
 from pygame import Vector3
 
 from state_machine import State, StateMachine
 from camera import Camera
+
+__author__ = "Jye-Ming Serres"
 
 
 @unique

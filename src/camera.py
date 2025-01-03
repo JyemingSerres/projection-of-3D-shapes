@@ -1,8 +1,9 @@
 """
-Created on 12/15/2024
-by Jye-Ming Serres
 """
+
 from pygame import Vector3
+
+__author__ = "Jye-Ming Serres"
 
 
 class Camera:

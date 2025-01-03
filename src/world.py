@@ -1,9 +1,11 @@
 """
-Created on 12/15/2024
-by Jye-Ming Serres
 """
+
 from shape import Shape
 from camera import Camera
+
+__author__ = "Jye-Ming Serres"
+
 
 class World:
     """

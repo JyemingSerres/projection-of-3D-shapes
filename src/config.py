@@ -1,9 +1,10 @@
 """
-Created on 12/15/2024
-by Jye-Ming Serres
 """
+
 import math
 from enum import Enum
+
+__author__ = "Jye-Ming Serres"
 
 
 # Display settings

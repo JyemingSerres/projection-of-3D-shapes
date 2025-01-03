@@ -1,9 +1,10 @@
 """
-Created on 12/20/2024
-by Jye-Ming Serres
 """
+
 from enum import Enum
 from abc import ABC, abstractmethod
+
+__author__ = "Jye-Ming Serres"
 
 
 class State(ABC):

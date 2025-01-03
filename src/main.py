@@ -1,8 +1,9 @@
+#!/usr/bin/env python3
 """
-Created on 12/15/2024
-by Jye-Ming Serres
 """
+
 import sys
+
 import pygame
 from pygame import Vector3
 
@@ -13,6 +14,8 @@ from camera import Camera
 from world import World
 from display import Display
 from engine import Engine
+
+__author__ = "Jye-Ming Serres"
 
 
 # Initialize Pygame

@@ -1,12 +1,14 @@
 """
-Created on 12/20/2024
-by Jye-Ming Serres
 """
+
 from collections.abc import Callable
+
 from pygame import Vector3
 
 from config import Color, GOLDEN_RATIO
 from shape import Shape
+
+__author__ = "Jye-Ming Serres"
 
 
 class ShapeFactory:

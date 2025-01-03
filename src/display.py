@@ -1,7 +1,6 @@
 """
-Created on 12/16/2024
-by Jye-Ming Serres
 """
+
 import pygame
 from pygame import Vector3, Vector2, draw
 from pygame.surface import Surface
@@ -9,6 +8,8 @@ from pygame.surface import Surface
 from config import Color
 from world import World
 from shape import Shape
+
+__author__ = "Jye-Ming Serres"
 
 
 class Display:
@@ -73,8 +74,6 @@ class Display:
                                 vertices_screen[edge[0]], vertices_screen[edge[1]])
 
     def _draw_ui(self, fps: float, camera_pos: Vector3) -> None:
-        margin = 5
-
         # draw crosshair
         x = self._screen_center.x
         y = self._screen_center.y
@@ -95,6 +94,7 @@ class Display:
 
         height = self._screen.get_height()
         width = self._screen.get_width()
+        margin = 5
         self._blit_strings(str_controls, self._ui_color, (margin, margin), line_spacing=2)
         self._blit_string(str_fps, self._ui_color, (margin, height - margin), b_just=True)
         self._blit_string(str_pos, self._ui_color, (width - margin, margin), r_just=True)
