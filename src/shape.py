@@ -36,7 +36,7 @@ class Shape:
     def edges(self) -> list[tuple]:
         return self._edges
 
-    def update(self, dt: float) -> None: pass
+    def update(self, dt: float) -> None: pass # pylint: disable=multiple-statements
 
     def move(self, displacement: Vector3) -> None:
         for vertex in self._vertices:

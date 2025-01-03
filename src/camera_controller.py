@@ -90,11 +90,11 @@ class SCam(State):
         super().__init__()
         self.camera_controller = camera_controller
 
-    def enter(self) -> None: pass
+    def enter(self) -> None: pass # pylint: disable=multiple-statements
 
-    def update(self) -> None: pass
+    def update(self) -> None: pass # pylint: disable=multiple-statements
 
-    def exit(self) -> None: pass
+    def exit(self) -> None: pass # pylint: disable=multiple-statements
 
 
 # lateral translation

@@ -19,7 +19,7 @@ from engine import Engine
 pygame.init()
 clock = pygame.time.Clock()
 screen = pygame.display.set_mode((config.SCREEN_WIDTH, config.SCREEN_HEIGHT))
-pygame.display.set_caption('Projection of 3D shapes')
+pygame.display.set_caption("Projection of 3D shapes")
 pygame.event.set_grab(True)
 pygame.event.set_keyboard_grab(False)
 

@@ -15,13 +15,13 @@ class State(ABC):
         self.transitions = dict()
 
     @abstractmethod
-    def enter(self) -> None: pass
+    def enter(self) -> None: pass # pylint: disable=multiple-statements
 
     @abstractmethod
-    def update(self) -> None: pass
+    def update(self) -> None: pass # pylint: disable=multiple-statements
 
     @abstractmethod
-    def exit(self) -> None: pass
+    def exit(self) -> None: pass # pylint: disable=multiple-statements
 
 
 class StateMachine:

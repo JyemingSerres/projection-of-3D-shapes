@@ -91,22 +91,24 @@ class Display:
             [LSHIFT] down
             [SPACE] up"""
         str_fps = f"FPS: {round(fps, 1)}"
-        str_pos = f"({camera_pos.x:.2f}, {camera_pos.y:.2f}, {camera_pos.z:.2f})"
+        str_pos = f"({camera_pos.x:.1f}, {camera_pos.y:.1f}, {camera_pos.z:.1f})"
 
+        height = self._screen.get_height()
+        width = self._screen.get_width()
         self._blit_strings(str_controls, self._ui_color, (margin, margin), line_spacing=2)
-        self._blit_string(str_fps, self._ui_color, (margin, self._screen.get_height() - margin), bottom_just=True)
-        self._blit_string(str_pos, self._ui_color, (self._screen.get_width() - margin, margin), right_just=True)
+        self._blit_string(str_fps, self._ui_color, (margin, height - margin), b_just=True)
+        self._blit_string(str_pos, self._ui_color, (width - margin, margin), r_just=True)
 
     def _blit_string(
             self,
             line: str,
             color: Color,
             coord: tuple[int,  int],
-            right_just: bool = False,
-            bottom_just: bool = False) -> pygame.Rect:
+            r_just: bool = False,
+            b_just: bool = False) -> pygame.Rect:
         surface = self._font.render(line.strip(), True, color.value)
-        x = coord[0] - surface.get_width() if right_just else coord[0]
-        y = coord[1] - surface.get_height() if bottom_just else coord[1]
+        x = coord[0] - surface.get_width() if r_just else coord[0]
+        y = coord[1] - surface.get_height() if b_just else coord[1]
         return self._screen.blit(surface, (x, y))
 
     def _blit_strings(
@@ -114,13 +116,13 @@ class Display:
             lines: str,
             color: Color,
             coord: tuple[int,  int],
-            right_just: bool = False,
-            bottom_just: bool = False,
+            r_just: bool = False,
+            b_just: bool = False,
             line_spacing: int = 0) -> None:
         strings = lines.split("\n")
-        y_offset = 0
+        total_offset = 0
         for string in strings:
             rect = self._blit_string(
-                string, color, (coord[0], coord[1] + y_offset), right_just, bottom_just)
+                string, color, (coord[0], coord[1] + total_offset), r_just, b_just)
             offset = rect.height + line_spacing
-            y_offset += -offset if bottom_just else offset
+            total_offset += -offset if b_just else offset
