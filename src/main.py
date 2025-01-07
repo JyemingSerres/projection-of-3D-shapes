@@ -39,9 +39,9 @@ display = Display(screen)
 engine = Engine(world, display, clock)
 
 while engine.running:
-    elapsed = clock.tick(config.TARGET_FRAME_RATE)
+    clock.tick(config.TARGET_FRAME_RATE)
     engine.handle_events()
-    engine.update_world(elapsed)
+    engine.update_world()
     engine.render()
 
 pygame.quit()
