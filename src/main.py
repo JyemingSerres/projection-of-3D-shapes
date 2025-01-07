@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-"""
+"""A showcase of perspective projection.
+
+This program creates a simulation containing the five platonic solids of different colors.
 """
 
 import sys
