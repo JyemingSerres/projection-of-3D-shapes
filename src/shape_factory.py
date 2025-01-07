@@ -1,4 +1,7 @@
-"""
+"""Provides a Factory class to make platonic solids.
+
+Classes:
+    ShapeFactory
 """
 
 from collections.abc import Callable
@@ -12,11 +15,26 @@ __author__ = "Jye-Ming Serres"
 
 
 class ShapeFactory:
-    """
-    ShapeFactory doc
+    """Platonic solid factory.
+
+    Methods:
+        make_shape()
     """
 
     def make_shape(self, shape_name: str, pos: Vector3, radius: float, color: Color) -> Shape:
+        """Makes a shape according its name, center position, circumscribed sphere radius and color.
+
+        shape_name options: "tetrahedron", "cube", "octahedron", "dodecahedron", "icosahedron". 
+
+        Args:
+            shape_name: Type of shape to create.
+            pos: Shape's center position.
+            radius: Radius of the polyhedron's circumscribed sphere.
+            color: Shape's display color. 
+
+        Returns:
+            The shape.
+        """
         maker = self._get_maker(shape_name)
         shape = maker(color)
         max_vect = max(shape.vertices, key=lambda vect: vect.length_squared())
@@ -40,7 +58,7 @@ class ShapeFactory:
             case "icosahedron":
                 maker = self._make_icosahedron
             case _:
-                raise ValueError(f"Unknown shape type to ShapeFactory : '{type}'")
+                raise ValueError(f"Unknown shape type : '{type}'")
         return maker
 
     def _make_tetrahedron(self, color: Color) -> Shape:
