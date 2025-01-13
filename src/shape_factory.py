@@ -17,20 +17,22 @@ __author__ = "Jye-Ming Serres"
 class ShapeFactory:
     """Platonic solid factory.
 
+    Code structure based on: https://realpython.com/factory-method-python/#basic-implementation-of-factory-method
+
     Methods:
         make_shape()
     """
 
     def make_shape(self, shape_name: str, pos: Vector3, radius: float, color: Color) -> Shape:
-        """Makes a shape according its name, center position, circumscribed sphere radius and color.
+        """Makes a shape according its name, center position, color and circumscribed sphere radius.
 
-        shape_name options: "tetrahedron", "cube", "octahedron", "dodecahedron", "icosahedron". 
+        shape_name options: "tetrahedron", "cube", "octahedron", "dodecahedron", "icosahedron".
 
         Args:
-            shape_name: Type of shape to create.
+            shape_name: Name of the shape to create.
             pos: Shape's center position.
-            radius: Radius of the polyhedron's circumscribed sphere.
-            color: Shape's display color. 
+            radius: Polyhedron's circumscribed sphere radius.
+            color: Shape's display color.
 
         Returns:
             The shape.
@@ -45,6 +47,19 @@ class ShapeFactory:
         return shape
 
     def _get_maker(self, shape_name: str) -> Callable[[Color], Shape]:
+        """Fetches the right maker for the specified shape name.
+
+        shape_name options: "tetrahedron", "cube", "octahedron", "dodecahedron", "icosahedron". 
+
+        Args:
+            shape_name: Name of the shape to create.
+
+        Returns:
+            A `Callable` that takes in a color and returns a shape.
+
+        Raises:
+            ValueError: If the specified shape name is not an available option.
+        """
         maker = None
         match shape_name:
             case "tetrahedron":
@@ -58,7 +73,7 @@ class ShapeFactory:
             case "icosahedron":
                 maker = self._make_icosahedron
             case _:
-                raise ValueError(f"Unknown shape type : '{type}'")
+                raise ValueError(f"Unknown shape name : '{shape_name}'")
         return maker
 
     def _make_tetrahedron(self, color: Color) -> Shape:

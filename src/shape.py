@@ -35,7 +35,7 @@ class Shape:
 
         args:
             center: Used as a basis for some manipulations like rotation.
-            vertices: List of 3D vectors representing each the coordinate of a vertex.
+            vertices: List of 3D vectors representing each the coordinates of a vertex.
             edges: Association table between vertices. Each tuple (an edge) contains the index of 
                 both connecting vertices within the list of 3D vectors.
             color: Color used to draw the shape.
@@ -58,15 +58,15 @@ class Shape:
 
     @property
     def vertices(self) -> list[Vector3]:
-        """List of 3D vectors representing each the coordinate of a vertex."""
+        """List of 3D vectors representing each the coordinates of a vertex."""
         return self._vertices
 
     @property
     def edges(self) -> list[tuple[int, int]]:
         """Association table between vertices. 
         
-        Each tuple (an edge) contains the index of both connecting vertices within the shape's list 
-        vertices.
+        Each tuple (an edge) contains the index of the connecting vertices within the shape's list 
+        of vertices.
         """
         return self._edges
 
