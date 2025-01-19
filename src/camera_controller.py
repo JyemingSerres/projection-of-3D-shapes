@@ -38,12 +38,12 @@ class CameraController:
     """Connects pygame events and inputs to the camera. 
 
     Attributes:
-        camera: The camera to control.
-        look_sens: A coefficient dictating how much the mouse influences camera rotation.
-        speed: The speed at which the camera travels.
-        sm_medial: State machine controlling the camera's medial movements.
-        sm_lateral: State machine controlling the camera's lateral movements.
-        sm_vertical: State machine controlling the camera's vertical movements.
+        camera (:obj:`Camera`): The camera to control.
+        look_sens (`float`): A coefficient dictating how much the mouse influences camera rotation.
+        speed (`int`): The speed at which the camera travels in pixels/second.
+        sm_medial (:obj:`StateMachine`): State machine governing the camera's medial movements.
+        sm_lateral (:obj:`StateMachine`): State machine governing the camera's lateral movements.
+        sm_vertical (:obj:`StateMachine`): State machine governing the camera's vertical movements.
 
     Methods:
         translate_event()
