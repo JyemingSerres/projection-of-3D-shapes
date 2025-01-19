@@ -81,7 +81,7 @@ class StateMachine:
     @property
     def states(self) -> list[State]:
         return self._states
-    
+
     @property
     def default_state(self) -> State:
         return self._default_state

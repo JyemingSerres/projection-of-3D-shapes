@@ -1,4 +1,4 @@
-"""Provides a container class for shapes and the camera.
+"""Provides the model of the program.
 
 Classes:
     World
@@ -11,7 +11,7 @@ __author__ = "Jye-Ming Serres"
 
 
 class World:
-    """Contains every shape and the camera. Acts as the model of the program.
+    """Contains the shapes and the camera. Acts as the model of the program.
 
     Methods:
         update()

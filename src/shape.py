@@ -17,7 +17,8 @@ class Shape:
     Generic manipulations of shapes should be based on this definition.
 
     Attributes:
-        velocity (:obj:`pygame.Vector3`): The shape's current velocity in unit/seconds.
+        rectilinear_velocity (:obj:`pygame.Vector3`): The shape's current velocity in 
+            pixels/seconds.
         angular_velocity (:obj:`pygame.Vector3`): The shape's current counterclockwise angular 
             velocity in degrees/seconds around the x, y, z axis.
 
@@ -48,7 +49,7 @@ class Shape:
         self._edges = edges
         self._color = color
 
-        self.linear_velocity = Vector3(0, 0, 0)
+        self.rectilinear_velocity = Vector3(0, 0, 0)
         self.angular_velocity = Vector3(0, 0, 0)
 
     @property
@@ -76,7 +77,7 @@ class Shape:
         return self._color
 
     def update(self, dt: float) -> None:
-        """Applies the shape's linear and angular velocity accross a time interval.
+        """Applies the shape's rectilinear and angular velocity accross a time interval.
 
         Args:
             dt: Delta time (seconds).
@@ -84,7 +85,7 @@ class Shape:
         Returns:
             None    
         """
-        self.move(self.linear_velocity * dt)
+        self.move(self.rectilinear_velocity * dt)
         self.rotate(self.angular_velocity * dt)
 
     def move(self, displacement: Vector3) -> None:
@@ -101,7 +102,7 @@ class Shape:
         Returns:
             None
         """
-        center_pos = self._center.copy() # shallow copy
+        center_pos = self._center.copy()
         self.move(-center_pos)
         for vertex in self._vertices:
             vertex.rotate_x_ip(angular_displacement.x)

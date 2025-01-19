@@ -1,4 +1,4 @@
-"""Provides the engine of the program
+"""Provides the engine/controller of the program.
 
 Classes:
     Engine

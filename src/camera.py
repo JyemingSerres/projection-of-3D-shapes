@@ -25,7 +25,7 @@ class Camera:
         rotate()
     """
 
-    def __init__(self, aperture: Vector3 = Vector3(0, 0, 0), focal_length: float = 360) -> None:
+    def __init__(self, aperture: Vector3, focal_length: float) -> None:
         """Creates an instance with a fixed focal length at the specified position.
 
         Args:

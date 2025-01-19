@@ -1,4 +1,4 @@
-"""Provides a Factory class to make platonic solids.
+"""Easily create platonic solids.
 
 Classes:
     ShapeFactory
@@ -15,9 +15,13 @@ __author__ = "Jye-Ming Serres"
 
 
 class ShapeFactory:
-    """Platonic solid factory.
+    """Platonic solid maker using factory design pattern.
 
-    Code structure based on: https://realpython.com/factory-method-python/#basic-implementation-of-factory-method
+    Code structure based on: 
+        https://realpython.com/factory-method-python/#basic-implementation-of-factory-method
+
+    Vertices' coordinates fetched from:
+        https://en.wikipedia.org/wiki/Platonic_solid#Cartesian_coordinates
 
     Methods:
         make_shape()
