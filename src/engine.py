@@ -36,9 +36,6 @@ class Engine:
             world: Acts as the model of the simulation.
             display: Manages the view of the simulation and the UI.
             clock: Tracks time elapsed and main loop frequency.
-        
-        Returns:
-            None
         """
         self.running = True
         self.world = world
@@ -47,11 +44,7 @@ class Engine:
         self._cam_control = CameraController(self.world.camera)
 
     def handle_events(self) -> None:
-        """Handles pygame's event loop and other user inputs through pygame.
-
-        Returns:
-            None
-        """
+        """Handles pygame's event loop and other user inputs through pygame."""
         for event in pygame.event.get():
             match event.type:
                 case pygame.QUIT:
@@ -79,9 +72,6 @@ class Engine:
         """Steps the simulation proportionally to real time elapsed.
 
         Ideally called after handle_events().
-
-        Returns:
-            None
         """
         self._cam_control.update()
         dt = self.clock.get_time() / 1000
@@ -91,9 +81,6 @@ class Engine:
         """Draws the simulation view and the UI then renders them on the screen.
 
         Should be called after update_world().
-
-        Returns:
-            None
         """
         self.display.draw(self.world, self.clock.get_fps())
         pygame.display.flip()

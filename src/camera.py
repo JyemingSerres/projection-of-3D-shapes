@@ -31,9 +31,6 @@ class Camera:
         Args:
             aperture: Position of the aperture/position of the camera.
             focal_length: Distance between the aperture and the projection plane. Influences FOV.
-
-        Returns:
-            None
         """
         self._aperture = aperture
         self._image_x = Vector3(0, -1, 0)
@@ -73,10 +70,7 @@ class Camera:
         """Applies the camera's rectilinear and angular velocity accross a time interval.
 
         Args:
-            dt: Delta time (seconds).
-
-        Returns:
-            None    
+            dt: Delta time (seconds).   
         """
         self.move(self.rectilinear_velocity * dt)
         self.rotate(self.angular_velocity)
@@ -90,9 +84,6 @@ class Camera:
         Args:
             angular_displacement: Counterclockwise rotation in degrees around `image_y` (yaw), 
                 `image_x` (pitch) then `orientation` (roll), in that order.
-
-        Returns:
-            None
         """
         self._image_x.rotate_ip(angular_displacement[0], self._image_y) # yaw
         self._image_y.rotate_ip(angular_displacement[1], self._image_x) # pitch

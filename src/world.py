@@ -23,9 +23,6 @@ class World:
         Args:
             camera: A virtual camera controlled by the end user.
             shapes: The shapes that make up the world.
-
-        Returns:
-            None
         """
         self._shapes = shapes
         self._camera = camera
@@ -43,9 +40,6 @@ class World:
 
         Args:
             dt: Delta time (seconds).
-
-        Returns:
-            None    
         """
         for shape in self._shapes:
             shape.update(dt)

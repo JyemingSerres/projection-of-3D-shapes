@@ -40,9 +40,6 @@ class Shape:
             edges: Association table between vertices. Each tuple (an edge) contains the index of 
                 both connecting vertices within the list of 3D vectors.
             color: Color used to draw the shape.
-
-        Returns:
-            None
         """
         self._center = center
         self._vertices = vertices
@@ -80,10 +77,7 @@ class Shape:
         """Applies the shape's rectilinear and angular velocity accross a time interval.
 
         Args:
-            dt: Delta time (seconds).
-
-        Returns:
-            None    
+            dt: Delta time (seconds).   
         """
         self.move(self.rectilinear_velocity * dt)
         self.rotate(self.angular_velocity * dt)
@@ -98,9 +92,6 @@ class Shape:
 
         Args:
             angular_displacement: Counterclockwise rotation in degrees around the x, y, z axis.
-
-        Returns:
-            None
         """
         center_pos = self._center.copy()
         self.move(-center_pos)

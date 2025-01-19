@@ -27,9 +27,6 @@ class Display:
 
         Args:
             screen: The surface to draw on.
-
-        Returns:
-            None
         """
         self._screen = screen
         self._screen_center = Vector2(screen.get_width(), screen.get_height())/2
@@ -45,9 +42,6 @@ class Display:
         Args:
             world: Model of the simulation.
             fps: Frames/second of the program.
-
-        Returns:
-            None
         """
         self._screen.fill(self._background_color.value)
         self._draw_world(world)
@@ -59,9 +53,6 @@ class Display:
 
         Args:
             world: Model of the simulation.
-
-        Returns:
-            None
         """
         camera = world.camera
         shapes = world.shapes
@@ -115,10 +106,7 @@ class Display:
 
         Args:
             fps: Frames/second of the program.
-            camera_pos: Current (x, y, z) position of the end user (camera). 
-
-        Returns:
-            None
+            camera_pos: Current (x, y, z) position of the end user (camera).
         """
         # draw crosshair
         x = self._screen_center.x
@@ -160,9 +148,6 @@ class Display:
             coord: The position onto which the line will justify to.
             r_just: Whether the line should justify on its right.
             b_just: Whether the line should justify on its bottom.
-
-        Returns:
-            None
         """
         surface = self._font.render(string.strip(), True, color.value)
         x = coord[0] - (surface.get_width() if r_just else 0)
@@ -186,9 +171,6 @@ class Display:
             r_just: Whether the line should justify on their right.
             b_just: Whether the line should justify on their bottom.
             line_spacing: Number of pixels between each line.
-
-        Returns:
-            None
         """
         lines = string.split("\n")
 

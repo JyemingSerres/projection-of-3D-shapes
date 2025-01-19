@@ -56,9 +56,6 @@ class CameraController:
 
         Args:
             camera: The camera to control.
-
-        Returns:
-            None
         """
         self.camera = camera
         self.look_sens = 0.1
@@ -100,9 +97,6 @@ class CameraController:
 
         Args:
             event: The event to broadcast accross state machines.
-
-        Returns:
-            None
         """
         self.sm_lateral.trigger(event)
         self.sm_medial.trigger(event)
@@ -113,18 +107,11 @@ class CameraController:
 
         Args:
             mouse_motion: Mouse motion in (x, y) since the last frame.
-
-        Returns:
-            None
         """
         self.camera.angular_velocity = -self.look_sens*Vector3(mouse_motion[0], mouse_motion[1], 0)
 
     def update(self) -> None:
-        """Reevaluates the camera's rectilinear velocity.
-
-        Returns:
-            None
-        """
+        """Reevaluates the camera's rectilinear velocity."""
         self.sm_medial.update()
         self.sm_lateral.update()
         self.sm_vertical.update()
@@ -146,14 +133,11 @@ class SCam(State):
     """
 
     def __init__(self, rel_direction: Vector3) -> None:
-        """xxx
+        """Creates an instance with access to the camera's relative velocity direction.
 
         Args:
             rel_direction: The direction in which the camera travels relative to its own 
                 orientation: x (medial), y (lateral), z (vertical).
-
-        Returns:
-            None
         """
         super().__init__()
         self._rel_direction = rel_direction
