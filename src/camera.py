@@ -16,7 +16,7 @@ class Camera:
         rectilinear_velocity (:obj:`pygame.Vector3`): The camera's current velocity in 
             pixels/seconds.
         angular_velocity (:obj:`pygame.Vector3`): The camera's current counterclockwise angular 
-            velocity in degrees/seconds around `image_y` (yaw), `image_x` (pitch) then 
+            velocity in degrees/second around `image_y` (yaw), `image_x` (pitch) then 
             `orientation` (roll), in that order.
 
     Methods:

@@ -83,6 +83,7 @@ class Shape:
         self.rotate(self.angular_velocity * dt)
 
     def move(self, displacement: Vector3) -> None:
+        displacement = displacement.copy() # Shallow copy
         for vertex in self._vertices:
             vertex += displacement
         self._center += displacement
@@ -93,7 +94,7 @@ class Shape:
         Args:
             angular_displacement: Counterclockwise rotation in degrees around the x, y, z axis.
         """
-        center_pos = self._center.copy()
+        center_pos = self._center.copy() # Shallow copy for the second move() call.
         self.move(-center_pos)
         for vertex in self._vertices:
             vertex.rotate_x_ip(angular_displacement.x)
