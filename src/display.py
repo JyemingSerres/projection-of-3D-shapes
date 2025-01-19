@@ -23,7 +23,7 @@ class Display:
     """
 
     def __init__(self, screen: Surface) -> None:
-        """Creates and instance with a surface.
+        """Creates and instance from a surface.
 
         Args:
             screen: The surface to draw on.
@@ -57,8 +57,8 @@ class Display:
         camera = world.camera
         shapes = world.shapes
 
-        # Sort shapes by the distance of their center to the projection plane. We make sure to
-        # draw shapes that are closer on top of shapes that are further.
+        # Sort shapes by the distance of their center to the image plane. We make sure to draw 
+        # shapes that are closer on top of shapes that are further.
 
         def center_to_plane_dist(shape: Shape):
             return (shape.center - camera.aperture).dot(camera.orientation)

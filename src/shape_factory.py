@@ -35,7 +35,7 @@ class ShapeFactory:
         Args:
             shape_name: Name of the shape to create.
             pos: Shape's center position.
-            radius: Polyhedron's circumscribed sphere radius.
+            radius: Shape's circumscribed sphere radius.
             color: Shape's display color.
 
         Returns:

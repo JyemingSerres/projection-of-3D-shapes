@@ -30,7 +30,7 @@ class Camera:
 
         Args:
             aperture: Position of the aperture/position of the camera.
-            focal_length: Distance between the aperture and the projection plane. Influences FOV.
+            focal_length: Distance between the aperture and the image plane. Influences FOV.
         """
         self._aperture = aperture
         self._image_x = Vector3(0, -1, 0)
@@ -63,7 +63,7 @@ class Camera:
 
     @property
     def focal_length(self) -> float:
-        """Distance between the aperture and the projection plane. Influences FOV."""
+        """Distance between the aperture and the image plane. Influences FOV."""
         return self._focal_length
 
     def update(self, dt: float) -> None:
@@ -94,7 +94,7 @@ class Camera:
     def _calculate_orientation(self) -> Vector3:
         """Calculates the orientation of the camera.
 
-        The orientation is a vector normal to the projection plane.
+        The orientation is a vector normal to the image plane.
 
         Returns:
             Orientation vector. (normalized)

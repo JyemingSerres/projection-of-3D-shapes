@@ -30,7 +30,7 @@ class Engine:
     """
 
     def __init__(self, world: World, display: Display, clock: Clock) -> None:
-        """Creates an instance with passed world, display and clock
+        """Creates an instance with passed world, display and clock.
 
         Args:
             world: Acts as the model of the simulation.
