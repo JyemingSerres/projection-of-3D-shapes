@@ -1,4 +1,17 @@
-"""
+"""Manage controls over a camera.
+
+Classes:
+    CameraController
+    SCam
+    SCamLateralLeft
+    SCamLateralRight
+    SCamLateralNeutral
+    SCamMedialFront
+    SCamMedialBack
+    SCamMedialNeutral
+    SCamVerticalUp
+    SCamVerticalDown
+    SCamVerticalNeutral
 """
 
 from enum import Enum, unique
@@ -22,40 +35,60 @@ class CamEvent(Enum):
 
 
 class CameraController:
-    """
-    CameraController doc
+    """Connects pygame events and inputs to the camera. 
+
+    Attributes:
+        camera: The camera to control.
+        look_sens: A coefficient dictating how much the mouse influences camera rotation.
+        speed: The speed at which the camera travels.
+        sm_medial: State machine controlling the camera's medial movements.
+        sm_lateral: State machine controlling the camera's lateral movements.
+        sm_vertical: State machine controlling the camera's vertical movements.
+
+    Methods:
+        translate_event()
+        rotate_event()
+        update()
     """
 
     def __init__(self, camera: Camera) -> None:
+        """Creates an instance with the camera to control.
+
+        Args:
+            camera: The camera to control.
+
+        Returns:
+            None
+        """
         self.camera = camera
         self.look_sens = 0.1
         self.speed = 400
-        self.rel_direction = Vector3(0, 0, 0) # relative to camera's point of view
-
-        # lateral translation state machine
-        lateral_neutral = SCamLateralNeutral(self)
-        lateral_left = SCamLateralLeft(self)
-        lateral_right = SCamLateralRight(self)
-        self.sm_lateral = StateMachine([lateral_neutral, lateral_left, lateral_right])
-        self.sm_lateral.add_transition(lateral_neutral, lateral_left, CamEvent.LEFT_SHIFT)
-        self.sm_lateral.add_transition(lateral_left, lateral_neutral, CamEvent.RIGHT_SHIFT)
-        self.sm_lateral.add_transition(lateral_neutral, lateral_right, CamEvent.RIGHT_SHIFT)
-        self.sm_lateral.add_transition(lateral_right, lateral_neutral, CamEvent.LEFT_SHIFT)
+        self._rel_direction = Vector3(0, 0, 0)
 
         # medial translation state machine
-        medial_neutral = SCamMedialNeutral(self)
-        medial_front = SCamMedialFront(self)
-        medial_back = SCamMedialBack(self)
+        medial_neutral = SCamMedialNeutral(self._rel_direction)
+        medial_front = SCamMedialFront(self._rel_direction)
+        medial_back = SCamMedialBack(self._rel_direction)
         self.sm_medial = StateMachine([medial_neutral, medial_front, medial_back])
         self.sm_medial.add_transition(medial_neutral, medial_front, CamEvent.FORWARD_SHIFT)
         self.sm_medial.add_transition(medial_front, medial_neutral, CamEvent.BACKWARD_SHIFT)
         self.sm_medial.add_transition(medial_neutral, medial_back, CamEvent.BACKWARD_SHIFT)
         self.sm_medial.add_transition(medial_back, medial_neutral, CamEvent.FORWARD_SHIFT)
 
+        # lateral translation state machine
+        lateral_neutral = SCamLateralNeutral(self._rel_direction)
+        lateral_right = SCamLateralRight(self._rel_direction)
+        lateral_left = SCamLateralLeft(self._rel_direction)
+        self.sm_lateral = StateMachine([lateral_neutral, lateral_left, lateral_right])
+        self.sm_lateral.add_transition(lateral_neutral, lateral_left, CamEvent.LEFT_SHIFT)
+        self.sm_lateral.add_transition(lateral_left, lateral_neutral, CamEvent.RIGHT_SHIFT)
+        self.sm_lateral.add_transition(lateral_neutral, lateral_right, CamEvent.RIGHT_SHIFT)
+        self.sm_lateral.add_transition(lateral_right, lateral_neutral, CamEvent.LEFT_SHIFT)
+
         # vertical translation state machine
-        vertical_neutral = SCamVerticalNeutral(self)
-        vertical_up = SCamVerticalUp(self)
-        vertical_down = SCamVerticalDown(self)
+        vertical_neutral = SCamVerticalNeutral(self._rel_direction)
+        vertical_up = SCamVerticalUp(self._rel_direction)
+        vertical_down = SCamVerticalDown(self._rel_direction)
         self.sm_vertical = StateMachine([vertical_neutral, vertical_up, vertical_down])
         self.sm_vertical.add_transition(vertical_neutral, vertical_up, CamEvent.UP_SHIFT)
         self.sm_vertical.add_transition(vertical_up, vertical_neutral, CamEvent.DOWN_SHIFT)
@@ -63,86 +96,122 @@ class CameraController:
         self.sm_vertical.add_transition(vertical_down, vertical_neutral, CamEvent.UP_SHIFT)
 
     def translate_event(self, event: CamEvent) -> None:
+        """Processes translation events using state machines.
+
+        Args:
+            event: The event to broadcast accross state machines.
+
+        Returns:
+            None
+        """
         self.sm_lateral.trigger(event)
         self.sm_medial.trigger(event)
         self.sm_vertical.trigger(event)
 
     def rotate_event(self, mouse_motion: tuple[int, int]) -> None:
+        """Reevaluates the camera's angular velocity based on mouse motion.
+
+        Args:
+            mouse_motion: Mouse motion in (x, y) since the last frame.
+
+        Returns:
+            None
+        """
         self.camera.angular_velocity = -self.look_sens*Vector3(mouse_motion[0], mouse_motion[1], 0)
 
     def update(self) -> None:
-        self.sm_lateral.update()
+        """Reevaluates the camera's rectilinear velocity.
+
+        Returns:
+            None
+        """
         self.sm_medial.update()
+        self.sm_lateral.update()
         self.sm_vertical.update()
-        if self.rel_direction.length() == 0:
-            self.camera.velocity = Vector3(0, 0, 0)
+        if self._rel_direction.length() == 0:
+            self.camera.rectilinear_velocity = Vector3(0, 0, 0)
         else:
-            rel_vel = self.speed * self.rel_direction.normalize()
-            self.camera.velocity =  (rel_vel.x*self.camera.orientation
-                                     - rel_vel.y*self.camera.image_x
-                                     + rel_vel.z*self.camera.image_y)
+            rel_vel = self.speed * self._rel_direction.normalize()
+            self.camera.rectilinear_velocity =  (rel_vel.x*self.camera.orientation
+                + rel_vel.y*self.camera.image_x + rel_vel.z*self.camera.image_y)
 
 
 class SCam(State):
-    """
-    SCam doc
+    """State related to the `Camera` class.
+
+    Methods:
+        enter()
+        update()
+        exit()
     """
 
-    def __init__(self, camera_controller: CameraController) -> None:
+    def __init__(self, rel_direction: Vector3) -> None:
+        """xxx
+
+        Args:
+            rel_direction: The direction in which the camera travels relative to its own 
+                orientation: x (medial), y (lateral), z (vertical).
+
+        Returns:
+            None
+        """
         super().__init__()
-        self.camera_controller = camera_controller
+        self._rel_direction = rel_direction
 
-    def enter(self) -> None: pass # pylint: disable=multiple-statements
-
-    def update(self) -> None: pass # pylint: disable=multiple-statements
-
-    def exit(self) -> None: pass # pylint: disable=multiple-statements
-
-
-# lateral translation
-class SCamLateralLeft(SCam):
     def enter(self) -> None:
-        self.camera_controller.rel_direction.y = 1
+        pass
 
+    def update(self) -> None:
+        pass
 
-class SCamLateralRight(SCam):
-    def enter(self) -> None:
-        self.camera_controller.rel_direction.y = -1
-
-
-class SCamLateralNeutral(SCam):
-    def enter(self) -> None:
-        self.camera_controller.rel_direction.y = 0
+    def exit(self) -> None:
+        pass
 
 
 # medial translation
 class SCamMedialFront(SCam):
     def enter(self) -> None:
-        self.camera_controller.rel_direction.x = 1
+        self._rel_direction.x = 1
 
 
 class SCamMedialBack(SCam):
     def enter(self) -> None:
-        self.camera_controller.rel_direction.x = -1
+        self._rel_direction.x = -1
 
 
 class SCamMedialNeutral(SCam):
     def enter(self) -> None:
-        self.camera_controller.rel_direction.x = 0
+        self._rel_direction.x = 0
+
+
+# lateral translation
+class SCamLateralRight(SCam):
+    def enter(self) -> None:
+        self._rel_direction.y = 1
+
+
+class SCamLateralLeft(SCam):
+    def enter(self) -> None:
+        self._rel_direction.y = -1
+
+
+class SCamLateralNeutral(SCam):
+    def enter(self) -> None:
+        self._rel_direction.y = 0
 
 
 # vertical translation
 class SCamVerticalUp(SCam):
     def enter(self) -> None:
-        self.camera_controller.rel_direction.z = 1
+        self._rel_direction.z = 1
 
 
 class SCamVerticalDown(SCam):
     def enter(self) -> None:
-        self.camera_controller.rel_direction.z = -1
+        self._rel_direction.z = -1
 
 
 class SCamVerticalNeutral(SCam):
     def enter(self) -> None:
-        self.camera_controller.rel_direction.z = 0
+        self._rel_direction.z = 0
 

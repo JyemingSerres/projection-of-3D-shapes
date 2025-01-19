@@ -1,4 +1,4 @@
-"""
+"""Contains the program's configurations and other constants.
 """
 
 import math
