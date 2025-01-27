@@ -18,6 +18,7 @@ from enum import Enum, unique
 
 from pygame import Vector3
 
+from config import CAMERA_LOOK_SENS, CAMERA_SPEED
 from state_machine import State, StateMachine
 from camera import Camera
 
@@ -58,8 +59,8 @@ class CameraController:
             camera: The camera to control.
         """
         self.camera = camera
-        self.look_sens = 0.1
-        self.speed = 400
+        self.look_sens = CAMERA_LOOK_SENS
+        self.speed = CAMERA_SPEED
         self._rel_direction = Vector3(0, 0, 0)
 
         # medial translation state machine
