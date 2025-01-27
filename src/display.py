@@ -32,8 +32,9 @@ class Display:
         self._screen_center = Vector2(screen.get_width(), screen.get_height())/2
         self._font = pygame.font.SysFont("Verdana", 12)
         self._crosshair_size = 10
-        self._ui_color = Color.WHITE
         self._background_color = Color.DEEP_SPACE
+        self._ui_color = Color.WHITE
+        self._ui_margin = 5
         pygame.mouse.set_visible(False)
 
     def draw(self, world: World, fps: float) -> None:
@@ -128,15 +129,13 @@ class Display:
 
         height = self._screen.get_height()
         width = self._screen.get_width()
-        margin = 5
-        self._blit_lines(str_controls, self._ui_color, (margin, margin), line_spacing=2)
-        self._blit_line(str_fps, self._ui_color, (margin, height - margin), b_just=True)
-        self._blit_line(str_pos, self._ui_color, (width - margin, margin), r_just=True)
+        self._blit_lines(str_controls, (self._ui_margin, self._ui_margin), line_spacing=2)
+        self._blit_line(str_fps, (self._ui_margin, height - self._ui_margin), b_just=True)
+        self._blit_line(str_pos, (width - self._ui_margin, self._ui_margin), r_just=True)
 
     def _blit_line(
             self,
             string: str,
-            color: Color,
             coord: tuple[int,  int],
             r_just: bool = False,
             b_just: bool = False) -> None:
@@ -144,12 +143,11 @@ class Display:
 
         Args:
             string: The string to draw. Will be cut when encountering a new line.
-            color: Color to draw the text with.
             coord: The position onto which the line will justify to.
             r_just: Whether the line should justify on its right.
             b_just: Whether the line should justify on its bottom.
         """
-        surface = self._font.render(string.strip(), True, color.value)
+        surface = self._font.render(string.strip(), True, self._ui_color.value)
         x = coord[0] - (surface.get_width() if r_just else 0)
         y = coord[1] - (surface.get_height() if b_just else 0)
         self._screen.blit(surface, (x, y))
@@ -157,7 +155,6 @@ class Display:
     def _blit_lines(
             self,
             string: str,
-            color: Color,
             coord: tuple[int,  int],
             r_just: bool = False,
             b_just: bool = False,
@@ -166,7 +163,6 @@ class Display:
 
         Args:
             string: The string to draw.
-            color: Color to draw the text with.
             coord: The position onto which the lines will justify to.
             r_just: Whether the line should justify on their right.
             b_just: Whether the line should justify on their bottom.
@@ -176,8 +172,8 @@ class Display:
 
         total_offset = 0
         blits = []
-        for line in reversed(lines):
-            surface = self._font.render(line.strip(), True, color.value)
+        for line in lines:
+            surface = self._font.render(line.strip(), True, self._ui_color.value)
             x = coord[0] - (surface.get_width() if r_just else 0)
             y = coord[1] - (surface.get_height() if b_just else 0) + total_offset
             blits.append((surface, (x, y)))
