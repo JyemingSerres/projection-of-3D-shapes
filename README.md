@@ -10,7 +10,7 @@ This project uses the [pinhole camera model](https://en.m.wikipedia.org/wiki/Pin
 ## Limitations
 Shapes are only displayed if all of their vertices are in front of the virtual camera's aperture, meaning the nearest shapes within the rendering frame can effectively disappear when moving the camera.
 
-The computational power required to display a shape is mostly independent of distance. That is to say, the processing load scales linearly with the quantity of shapes.
+The computational power required to display a shape is mostly independent of distance. That is to say, the processing load scales linearly with the quantity of shapes within the rendering frame.
 
 ## Dependencies
 pygame 2.6.1 (SDL 2.28.4, Python 3.10.6)
