@@ -14,3 +14,4 @@ The computational power required to display a shape is mostly independent of dis
 
 ## Dependencies
 pygame 2.6.1 (SDL 2.28.4, Python 3.10.6)
+pyinstaller 6.16.0
