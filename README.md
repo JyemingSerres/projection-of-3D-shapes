@@ -3,7 +3,7 @@
 ## Introduction
 The goal of this exercise is to display 3D shapes onto a 2D screen using 3-point perspective. Using mouse and keyboard inputs, the user is able to travel across space to inspect objects at various angles.
 
-![An execution displaying the platonic solids in different colors](/assets/execution.gif)
+![Video of the execution displaying the platonic solids in different colors](/assets/execution.gif)
 ## Theoretical background
 This project uses the [pinhole camera model](https://en.m.wikipedia.org/wiki/Pinhole_camera_model). An image is simply the orthogonal projection of its object onto an image plane. But the image's size is inversely proportional to the object's perpendicular distance from the plane. In this program, a shape is defined by a list of vectors, each of which represents the position of a vertex. Edges are represented by an association table of vertices.
 
@@ -13,5 +13,6 @@ Shapes are only displayed if all of their vertices are in front of the virtual c
 The computational power required to display a shape is mostly independent of distance. That is to say, the processing load scales linearly with the quantity of shapes within the rendering frame.
 
 ## Dependencies
-pygame 2.6.1 (SDL 2.28.4, Python 3.10.6)
-pyinstaller 6.16.0
+- pygame 2.6.1 (SDL 2.28.4, Python 3.10.6)
+- pylint 3.3.2
+- pyinstaller 6.16.0
