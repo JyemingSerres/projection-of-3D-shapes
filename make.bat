@@ -6,7 +6,7 @@
 SET execname=Projection-of-3D-shapes
 
 :: Main script path
-SET mainscript=src/main.py
+SET mainscript=./src/main.py
 
 :: Where the executable is stored
 SET distpath=./dist
