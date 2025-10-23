@@ -5,12 +5,12 @@ The goal of this exercise is to display 3D shapes onto a 2D screen using 3-point
 
 ![Video of the executable running displaying platonic solids in different colors](/assets/execution.gif)
 ## Theoretical background
-This project uses the [pinhole camera model](https://en.m.wikipedia.org/wiki/Pinhole_camera_model). An image is simply the orthogonal projection of its object onto an image plane. But the image's size is inversely proportional to the object's perpendicular distance from the plane. In this program, a shape is defined by a list of vectors, each of which represents the position of a vertex. Edges are represented by an association table of vertices.
+This project uses the [pinhole camera model](https://en.m.wikipedia.org/wiki/Pinhole_camera_model). An image is simply the orthogonal projection of its object onto an image plane. But the image's size is inversely proportional to the object's perpendicular distance from the plane. In this program, a shape is defined by a list of vectors, each of which representing the position of a vertex. Edges are represented by an association table of vertices.
 
 ## Limitations
 Shapes are only displayed if all of their vertices are in front of the virtual camera's aperture, meaning the nearest shapes within the rendering frame can effectively disappear at certain angles.
 
-Shapes will require mostly the same amount of computation whether they are very far or very close. The computational load scales linearly with the quantity of shapes within the rendering frame.
+Shapes will require mostly the same amount of computation whether they are far or near. The computational load scales linearly with the quantity of shapes within the rendering frame.
 
 ## Dependencies
 - pygame 2.6.1 (SDL 2.28.4, Python 3.10.6)
