@@ -1,7 +1,7 @@
 # Projection of 3D shapes
 [![linting: pylint](https://img.shields.io/badge/linting-pylint-yellowgreen)](https://github.com/pylint-dev/pylint)
 ## Introduction
-The goal of this exercise is to display 3D shapes onto a 2D screen using 3-point perspective. Using mouse and keyboard inputs, the user is able to travel across space to inspect objects at various angles.
+The goal of this exercise is to display 3D shapes onto a 2D screen. Using mouse and keyboard inputs, the user is able to travel across space to inspect objects at various angles.
 
 ![Video of the executable running displaying platonic solids in different colors](/assets/execution.gif)
 ## Theoretical background
